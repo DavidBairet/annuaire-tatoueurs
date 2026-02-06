@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<%- include("../partials/head") %>
+
+    <body>
+        <%- include("../partials/header") %>
+            <main class="container">
+                <h1>
+                    <%= artist.name %>
+                </h1>
+                <p>
+                    <%= artist.city %>
+                </p>
+                <p>
+                    <%= (artist.styles || []).join(", ") %></p>
+      <a href=" /artists">← Retour</a>
+            </main>
+            <%- include("../partials/footer") %>
+    </body>
+
+</html>

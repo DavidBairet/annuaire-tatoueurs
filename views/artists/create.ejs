@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<%- include("../partials/head") %>
+
+    <body>
+        <%- include("../partials/header") %>
+
+            <main class="container">
+                <h1>Inscription</h1>
+
+                <% if (locals.errors) { %>
+                    <ul class="errors">
+                        <% errors.forEach(e=> { %>
+                            <li>
+                                <%= e.msg %>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <% } %>
+
+                        <form class="form" method="POST" action="/artists/create">
+                            <input name="name" placeholder="Nom / Studio" required>
+                            <input name="city" placeholder="Ville" required>
+                            <input name="styles" placeholder="Styles (virgules)">
+                            <input name="instagram" placeholder="Instagram URL">
+                            <button class="btn" type="submit">Ajouter</button>
+                        </form>
+            </main>
+
+            <%- include("../partials/footer") %>
+    </body>
+
+</html>

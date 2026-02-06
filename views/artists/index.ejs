@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<%- include("../partials/head") %>
+
+    <body>
+        <%- include("../partials/header") %>
+            <main class="container">
+                <h1>Liste</h1>
+                <ul>
+                    <% artists.forEach(a=> { %>
+                        <li><a href="/artists/<%= a.id %>">
+                                <%= a.name %>
+                            </a> — <%= a.city %>
+                        </li>
+                        <% }) %>
+                </ul>
+            </main>
+            <%- include("../partials/footer") %>
+    </body>
+
+</html>
