@@ -1,14 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<%- include("partials/head") %>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Annuaire de tatoueurs</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
 
-    <body>
-        <%- include("partials/header") %>
-            <main class="container">
-                <h1>Accueil</h1>
-                <a class="btn" href="/artists">Voir les tatoueurs</a>
-            </main>
-            <%- include("partials/footer") %>
-    </body>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="logo" href="/">Annuaire</a>
 
+      <nav class="menu">
+        <a href="/artists">Tatoueurs</a>
+        <a href="/artists/new" class="menu__cta">Inscription</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero__inner">
+        <h1>Trouve ton tatoueur</h1>
+        <p>Explore les artistes par ville et style, consulte leurs profils et contacte-les facilement.</p>
+<form class="search" action="/artists" method="GET">
+  <input
+    class="search__input"
+    type="search"
+    name="q"
+    placeholder="Chercher un tatoueur (nom, ville, style...)"
+    autocomplete="off"
+  />
+  <button class="search__btn" type="submit">Rechercher</button>
+</form>
+
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="/artists">Voir les tatoueurs</a>
+          <a class="btn btn--ghost" href="/artists/new">Inscrire un artiste</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Accueil</h2>
+        <p>
+          Bienvenue sur l’annuaire. L’objectif : centraliser les artistes, leurs styles, leurs villes et leurs liens.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small>© <%= new Date().getFullYear() %> — Annuaire de tatoueurs</small>
+    </div>
+  </footer>
+
+</body>
 </html>
