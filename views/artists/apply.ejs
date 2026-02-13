@@ -1,0 +1,23 @@
+<h1>Inscription artiste</h1>
+
+<form method="POST" action="/artists/apply">
+  <!-- honeypot anti-bot -->
+  <input type="text" name="website" style="display:none" autocomplete="off">
+
+  <label>Nom / Studio</label>
+  <input name="name" required>
+
+  <label>Ville</label>
+  <input name="city" required>
+
+  <label>Styles (séparés par virgules)</label>
+  <input name="styles" placeholder="Fine line, Floral">
+
+  <label>Instagram</label>
+  <input name="instagram" placeholder="https://instagram.com/..." />
+
+  <label>Contact (email/site)</label>
+  <input name="contact" />
+
+  <button type="submit">Envoyer ma demande</button>
+</form>

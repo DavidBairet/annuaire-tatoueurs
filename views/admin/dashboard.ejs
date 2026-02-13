@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .wrap{ width:min(1100px,92vw); margin:40px auto; }
+    .top{ display:flex; justify-content:space-between; align-items:center; gap:16px; }
+    .pills{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .pill{ padding:6px 10px; border-radius:999px; border:1px solid rgba(227,82,198,.35); background: rgba(18,18,26,.55); }
+
+    .bar{ display:flex; gap:10px; flex-wrap:wrap; margin:18px 0; align-items:center; }
+    .input{
+      flex: 1;
+      min-width: 220px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(227,82,198,.25);
+      background: rgba(18,18,26,.55);
+      color: inherit;
+      outline: none;
+    }
+    .btn{ border:1px solid rgba(227,82,198,.25); background: rgba(18,18,26,.55); padding:10px 14px; border-radius:14px; cursor:pointer; color:inherit; }
+    .btnSmall{ padding:8px 12px; border-radius:12px; }
+    .danger{ border-color: rgba(255,90,90,.55); }
+
+    .tabs{ display:flex; gap:10px; flex-wrap:wrap; }
+    .tab{ text-decoration:none; display:inline-block; }
+    .tab .btn{ opacity:.85; }
+    .tabActive .btn{ border-color: rgba(227,82,198,.6); opacity:1; }
+
+    .list{ display:flex; flex-direction:column; gap:12px; margin-top:14px; }
+    .card{ padding:14px; border-radius:18px; border:1px solid rgba(227,82,198,.22);
+      background: linear-gradient(180deg, rgba(18,18,26,.75), rgba(26,26,40,.80)); }
+    .row{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+    .meta{ opacity:.75; font-size:13px; margin-top:4px; }
+    .actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>Dashboard Admin</h1>
+        <div class="pills">
+          <span class="pill">En attente : <strong><%= counts.pending %></strong></span>
+          <span class="pill">Validés : <strong><%= counts.approved %></strong></span>
+          <span class="pill">Refusés : <strong><%= counts.rejected %></strong></span>
+        </div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn" type="submit">Logout</button>
+      </form>
+    </div>
+
+    <form class="bar" method="GET" action="/admin">
+      <input class="input" type="text" name="q" value="<%= q || '' %>" placeholder="Rechercher (nom, ville, style, insta…)">
+      <input type="hidden" name="status" value="<%= status %>">
+      <button class="btn" type="submit">Rechercher</button>
+      <a class="btn" href="/admin?status=<%= status %>">Reset</a>
+    </form>
+
+    <div class="tabs">
+      <a class="tab <%= status === 'pending' ? 'tabActive' : '' %>" href="/admin?status=pending&q=<%= encodeURIComponent(q || '') %>">
+        <button class="btn" type="button">En attente</button>
+      </a>
+      <a class="tab <%= status === 'approved' ? 'tabActive' : '' %>" href="/admin?status=approved&q=<%= encodeURIComponent(q || '') %>">
+        <button class="btn" type="button">Validés</button>
+      </a>
+      <a class="tab <%= status === 'rejected' ? 'tabActive' : '' %>" href="/admin?status=rejected&q=<%= encodeURIComponent(q || '') %>">
+        <button class="btn" type="button">Refusés</button>
+      </a>
+    </div>
+
+    <% if (!list.length) { %>
+      <p style="margin-top:14px;">Aucun résultat.</p>
+    <% } %>
+
+    <div class="list">
+      <% list.forEach(a => { %>
+        <div class="card">
+          <div class="row">
+            <div>
+              <strong><%= a.name %></strong>
+              <div class="meta">📍 <%= a.city %> <% if (a.styles?.length) { %> — 🎨 <%= a.styles.join(", ") %> <% } %></div>
+              <div class="meta"><% if (a.instagram) { %><%= a.instagram %><% } %> <% if (a.contact) { %> — <%= a.contact %><% } %></div>
+            </div>
+            <div class="meta"><%= new Date(a.createdAt).toLocaleString("fr-FR") %></div>
+          </div>
+
+          <div class="actions">
+            <% if (status === "pending") { %>
+              <form method="POST" action="/admin/artists/<%= a._id %>/approve"><button class="btnSmall btn" type="submit">✅ Approuver</button></form>
+              <form method="POST" action="/admin/artists/<%= a._id %>/reject"><button class="btnSmall btn" type="submit">❌ Refuser</button></form>
+            <% } else { %>
+              <form method="POST" action="/admin/artists/<%= a._id %>/pending"><button class="btnSmall btn" type="submit">↩ Remettre en attente</button></form>
+            <% } %>
+
+            <form method="POST" action="/admin/artists/<%= a._id %>/delete" onsubmit="return confirm('Supprimer définitivement ?');">
+              <button class="btnSmall btn danger" type="submit">🗑 Supprimer</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+</html>
