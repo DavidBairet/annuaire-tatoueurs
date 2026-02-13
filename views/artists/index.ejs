@@ -1,21 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<%- include("../partials/head") %>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
 
-    <body>
-        <%- include("../partials/header") %>
-            <main class="container">
-                <h1>Liste</h1>
-                <ul>
-                    <% artists.forEach(a=> { %>
-                        <li><a href="/artists/<%= a.id %>">
-                                <%= a.name %>
-                            </a> — <%= a.city %>
-                        </li>
-                        <% }) %>
-                </ul>
-            </main>
-            <%- include("../partials/footer") %>
-    </body>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="logo" href="/">Annuaire</a>
+      <nav class="menu">
+        <a href="/artists">Tatoueurs</a>
+        <a href="/artists/new" class="menu__cta">Inscription</a>
+      </nav>
+    </div>
+  </header>
 
+  <main class="section">
+    <div class="container">
+      <div class="pageHead">
+        <div>
+          <h1 class="pageTitle">Tatoueurs</h1>
+          <p class="pageSub">
+            <span id="countLine"><%= artists.length %></span> résultat(s)
+            <% if (q) { %>
+              pour “<strong><%= q %></strong>”
+            <% } %>
+            <span class="muted">— total: <%= total %></span>
+          </p>
+        </div>
+      </div>
+
+      <form class="search search--page" action="/artists" method="GET">
+        <input
+          id="searchInput"
+          class="search__input"
+          type="search"
+          name="q"
+          value="<%= q %>"
+          placeholder="Nom, ville, style…"
+          autocomplete="off"
+        />
+        <button class="search__btn" type="submit">Rechercher</button>
+        <a class="btn btn--ghost" href="/artists">Reset</a>
+      </form>
+
+      <section class="cards" id="cards">
+        <% artists.forEach(a => { %>
+          <article class="cardArtist"
+            data-name="<%= a.name.toLowerCase() %>"
+            data-city="<%= a.city.toLowerCase() %>"
+            data-styles="<%= (a.styles || []).join(' ').toLowerCase() %>">
+            <div class="cardArtist__top">
+              <h2 class="cardArtist__title"><%= a.name %></h2>
+              <p class="cardArtist__meta"><span class="dot"></span> <%= a.city %></p>
+            </div>
+
+            <div class="tags">
+              <% (a.styles || []).forEach(s => { %>
+                <span class="tag"><%= s %></span>
+              <% }) %>
+            </div>
+
+            <div class="actions">
+              <a class="btn btn--primary" href="<%= a.instagram %>" target="_blank" rel="noopener">Instagram</a>
+              <a class="btn" href="mailto:<%= a.contact %>">Contacter</a>
+            </div>
+          </article>
+        <% }) %>
+      </section>
+
+      <section class="empty" id="empty" <% if (artists.length) { %>hidden<% } %>>
+        <h3>Aucun résultat</h3>
+        <p>Essaie une autre ville, un style, ou le nom d’un artiste.</p>
+      </section>
+    </div>
+  </main>
+
+  <script src="/artists.js"></script>
+</body>
 </html>
