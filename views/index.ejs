@@ -5,19 +5,28 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Annuaire de tatoueurs</title>
   <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="/images/logo.png">
+
 </head>
 <body>
 
   <header class="topbar">
-    <div class="container topbar__inner">
-      <a class="logo" href="/">Annuaire</a>
+  <div class="container topbar__inner">
+   <a class="logo" href="/">
+  <img src="/images/logo.png" alt="" class="logo__img">
+  <span class="logo__text">Annuaire</span>
+</a>
 
-      <nav class="menu">
-        <a href="/artists">Tatoueurs</a>
-        <a href="/artists/new" class="menu__cta">Inscription</a>
-      </nav>
-    </div>
-  </header>
+
+
+    <nav class="menu">
+      <a href="/conseils">Conseils</a>
+
+      <a href="/formations">Hygiène &amp; salubrité</a>
+      <a href="/artists/new" class="menu__cta">Inscription artiste</a>
+    </nav>
+  </div>
+</header>
 
   <main>
     <section class="hero">
@@ -37,7 +46,7 @@
 
         <div class="hero__actions">
           <a class="btn btn--primary" href="/artists">Voir les tatoueurs</a>
-          <a class="btn btn--ghost" href="/artists/new">Inscrire un artiste</a>
+          
         </div>
       </div>
     </section>

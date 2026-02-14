@@ -1,17 +1,58 @@
-<h1>Connexion Admin</h1>
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title %></title>
 
-<% if (error) { %>
-  <p style="color:red;"><%= error %></p>
-<% } %>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
 
-<form method="POST" action="/admin/login">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+<div class="loginWrap">
 
-  <label>Email</label>
-  <input name="email" type="email" required>
+  <div class="loginCard">
 
-  <label>Mot de passe</label>
-  <input name="password" type="password" required>
+    <h1 class="loginTitle">Admin Login</h1>
 
-  <button type="submit">Se connecter</button>
-</form>
+    <% if (error) { %>
+      <div class="loginError">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <form method="POST" action="/admin/login" class="loginForm">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div>
+        <label class="loginLabel">Email</label>
+        <input
+          class="loginInput"
+          type="email"
+          name="email"
+          required
+        >
+      </div>
+
+      <div>
+        <label class="loginLabel">Mot de passe</label>
+        <input
+          class="loginInput"
+          type="password"
+          name="password"
+          required
+        >
+      </div>
+
+      <button class="loginBtn" type="submit">
+        Se connecter
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+</body>
+</html>

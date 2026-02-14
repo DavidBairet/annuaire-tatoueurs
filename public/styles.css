@@ -285,3 +285,57 @@ body{
 @media (max-width: 820px){
   .cardArtist{ grid-column: span 12; }
 }
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo__img {
+  height: 42px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.logo__text {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  color: #f2f0ff;
+}
+
+.logo:hover .logo__text {
+  color: var(--accent);
+}
+/* ===== BRAND FINAL ===== */
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+}
+
+.logo__img{
+  height:42px;
+  width:auto;
+  display:block;
+}
+
+.logo__text{
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:0.6px;
+  color:#f2f0ff;
+}
+
+.logo:hover .logo__text{
+  color:var(--accent);
+}
+
+/* améliore légèrement la navbar */
+.topbar{
+  background: rgba(10,10,18,0.85);
+}
