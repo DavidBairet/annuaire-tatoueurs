@@ -1,11 +1,17 @@
-/* =========================
-   ADMIN — Dashboard
-   ========================= */
+/* =========================================================
+   ADMIN DASHBOARD — STRUCTURE PRINCIPALE
+   ========================================================= */
 
+/* Conteneur principal centré */
 .wrap{
   width:min(1100px,92vw);
   margin:40px auto;
 }
+
+
+/* =========================================================
+   HEADER (titre + bouton logout)
+   ========================================================= */
 
 .top{
   display:flex;
@@ -14,6 +20,11 @@
   gap:16px;
 }
 
+
+/* =========================================================
+   PILLS (compteurs : En attente / Validés / Refusés)
+   ========================================================= */
+
 .pills{
   display:flex;
   gap:10px;
@@ -21,12 +32,28 @@
   margin-top:10px;
 }
 
+/* Chaque pill individuelle */
 .pill{
-  padding:6px 10px;
+  padding:6px 12px;
+
   border-radius:999px;
+
+  /* Couleur bordure */
   border:1px solid rgba(227,82,198,.35);
-  background: rgba(18,18,26,.55);
+
+  /* Couleur fond */
+  background: rgba(244, 244, 247, 0.65);
+
+  /* Couleur texte */
+  color:#f2f0ff;
+
+  font-size:13px;
 }
+
+
+/* =========================================================
+   BARRE DE RECHERCHE + BOUTONS
+   ========================================================= */
 
 .bar{
   display:flex;
@@ -36,122 +63,267 @@
   align-items:center;
 }
 
+
+/* =========================================================
+   INPUT RECHERCHE
+   ========================================================= */
+
 .input{
+
   flex: 1;
   min-width: 220px;
+
   padding: 10px 12px;
+
   border-radius: 14px;
+
   border:1px solid rgba(227,82,198,.25);
+
   background: rgba(18,18,26,.55);
-  color: inherit;
+
+  color:#f2f0ff;
+
   outline: none;
 }
 
+/* placeholder texte */
 .input::placeholder{
   color: rgba(242,240,255,.55);
 }
 
-.btn{
-  border:1px solid rgba(227,82,198,.25);
-  background: rgba(18,18,26,.55);
-  padding:10px 14px;
-  border-radius:14px;
-  cursor:pointer;
-  color:inherit;
+/* focus input */
+.input:focus{
+  border-color:#e352c6;
 }
 
-.btn:hover{
-  border-color: rgba(227,82,198,.55);
+
+/* =========================================================
+   BOUTONS GENERAUX
+   Classe principale pour TOUS les boutons admin
+   ========================================================= */
+
+.btn{
+
+  padding:10px 14px;
+
+  border-radius:14px;
+
+  cursor:pointer;
+
+  font-size:14px;
+
+  transition: all .2s ease;
+
+  /* COULEUR FOND */
+  background: rgba(251, 251, 252, 0.65);
+
+  /* COULEUR TEXTE */
+  color:#f2f0ff;
+
+  /* COULEUR BORDURE */
+  border:1px solid rgba(248, 244, 247, 0.35);
 }
+
+
+/* Hover bouton */
+.btn:hover{
+
+  /* fond légèrement rose */
+  background: rgba(227,82,198,.15);
+
+  border-color:#e352c6;
+
+  color:white;
+}
+
+
+/* =========================================================
+   BOUTON PRINCIPAL (ex : Rechercher)
+   ajouter class="btn btnPrimary"
+   ========================================================= */
+
+.btnPrimary{
+
+  background:#e352c6;
+
+  border-color:#e352c6;
+
+  color:white;
+}
+
+.btnPrimary:hover{
+
+  background:#ff6adf;
+
+  border-color:#ff6adf;
+}
+
+
+/* =========================================================
+   PETITS BOUTONS (Valider / Refuser)
+   ========================================================= */
 
 .btnSmall{
+
   padding:8px 12px;
+
+  font-size:13px;
+
   border-radius:12px;
 }
 
+
+/* =========================================================
+   BOUTON DANGER (Refuser)
+   ajouter class="btn danger"
+   ========================================================= */
+
 .danger{
+
   border-color: rgba(255,90,90,.55);
+
+  color: rgba(255,90,90,.9);
 }
 
 .danger:hover{
+
+  background: rgba(255,90,90,.15);
+
   border-color: rgba(255,90,90,.85);
+
+  color:white;
 }
 
+
+/* =========================================================
+   TABS (En attente / Validés / Refusés)
+   ========================================================= */
+
 .tabs{
+
   display:flex;
+
   gap:10px;
+
   flex-wrap:wrap;
 }
 
 .tab{
+
   text-decoration:none;
-  display:inline-block;
 }
 
+/* bouton dans tab */
 .tab .btn{
-  opacity:.85;
+
+  opacity:.7;
 }
 
+/* tab active */
 .tabActive .btn{
-  border-color: rgba(227,82,198,.6);
+
   opacity:1;
+
+  border-color:#f7f2f6;
 }
+
+
+/* =========================================================
+   LISTE DES ARTISTES
+   ========================================================= */
 
 .list{
+
   display:flex;
+
   flex-direction:column;
+
   gap:12px;
+
   margin-top:14px;
 }
 
+
+/* =========================================================
+   CARD ARTIST
+   ========================================================= */
+
 .card{
+
   padding:14px;
+
   border-radius:18px;
-  border:1px solid rgba(227,82,198,.22);
-  background: linear-gradient(180deg, rgba(18,18,26,.75), rgba(26,26,40,.80));
+
+  background: rgba(18,18,26,.65);
+
+  border:1px solid rgba(227,82,198,.25);
 }
 
+
+/* ligne principale card */
 .row{
+
   display:flex;
+
   justify-content:space-between;
+
   gap:12px;
+
   align-items:flex-start;
 }
 
+
+/* meta info (ville, style, date) */
 .meta{
+
   opacity:.75;
+
   font-size:13px;
+
   margin-top:4px;
 }
 
+
+/* container boutons actions */
 .actions{
+
   display:flex;
+
   gap:8px;
+
   flex-wrap:wrap;
+
   margin-top:10px;
 }
 
-/* Responsive */
-@media (max-width: 720px){
-  .top{ flex-direction:column; align-items:flex-start; }
-  .row{ flex-direction:column; }
-}
-/* =========================
-   ADMIN — LOGIN
-   ========================= */
+
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
 
 .loginWrap{
+
   min-height: 100vh;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
   padding:20px;
 }
 
+
+/* card login */
 .loginCard{
+
   width:100%;
+
   max-width:420px;
+
   padding:26px;
+
   border-radius:18px;
 
   background: linear-gradient(
@@ -162,60 +334,117 @@
 
   border:1px solid rgba(227,82,198,.25);
 
-  box-shadow:
-    0 14px 40px rgba(0,0,0,.60);
+  box-shadow: 0 14px 40px rgba(0,0,0,.60);
 
   backdrop-filter: blur(10px);
 }
 
+
+/* titre login */
 .loginTitle{
+
   text-align:center;
+
   margin-bottom:20px;
+
   font-size:22px;
 }
 
+
+/* form login */
 .loginForm{
+
   display:flex;
+
   flex-direction:column;
+
   gap:14px;
 }
 
+
+/* label login */
 .loginLabel{
+
   font-size:13px;
+
   opacity:.75;
 }
 
+
+/* input login */
 .loginInput{
+
   padding:10px 12px;
+
   border-radius:12px;
+
   border:1px solid rgba(227,82,198,.25);
+
   background: rgba(18,18,26,.55);
-  color:inherit;
-  outline:none;
+
+  color:white;
 }
 
 .loginInput:focus{
-  border-color: rgba(227,82,198,.55);
+
+  border-color:#e352c6;
 }
 
+
+/* bouton login */
 .loginBtn{
+
   margin-top:10px;
+
   padding:12px;
+
   border-radius:14px;
-  border:1px solid rgba(227,82,198,.35);
-  background: whitesmoke;
+
+  border:1px solid #e352c6;
+
+  background:#e352c6;
+
+  color:white;
+
   cursor:pointer;
 }
 
 .loginBtn:hover{
-  border-color: rgba(227,82,198,.7);
+
+  background:#ff6adf;
 }
 
+
+/* message erreur */
 .loginError{
+
   margin-bottom:12px;
+
   padding:10px;
+
   border-radius:12px;
+
   border:1px solid rgba(255,90,90,.55);
+
   background: rgba(255,90,90,.10);
+
   font-size:14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 720px){
+
+  .top{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .row{
+    flex-direction:column;
+  }
+
 }

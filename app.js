@@ -6,161 +6,81 @@ const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const ConnectMongo = require("connect-mongo");
+const MongoStore = ConnectMongo.create ? ConnectMongo : ConnectMongo.default;
 const bcrypt = require("bcrypt");
 
+const connectDB = require("./config/db");
 const User = require("./models/User");
 
 const indexRouter = require("./routes/indexRouter");
 const artistsRouter = require("./routes/artistsRouter");
-const adminRouter = require("./routes/adminRouter");
-const adviceRouter = require("./routes/adviceRouter");
+const adminRouter = require("./routes/adminRouter"); // on va le créer juste après
 
 const app = express();
 
-// =========================
-// CONFIG
-// =========================
-
-const PORT = process.env.PORT || 3000;
-const USE_MONGO = process.env.USE_MONGO === "true" && !!process.env.MONGO_URI;
-
-// =========================
-// VIEWS
-// =========================
-
+// Views
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-// =========================
-// MIDDLEWARES
-// =========================
-
+// Middlewares de base
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// =========================
-// SESSIONS
-// =========================
-
-if (USE_MONGO) {
-
-  console.log("🟢 Sessions MongoDB activées");
-
-  app.use(session({
+// Sessions (stockées en MongoDB)
+app.use(
+  session({
     secret: process.env.SESSION_SECRET || "dev_secret_change_me",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
 
-    store: ConnectMongo.create({
-      mongoUrl: process.env.MONGO_URI,
-    }),
 
     cookie: {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 jours
     },
+  })
+);
 
-  }));
-
-} else {
-
-  console.log("🟡 Mode DEV sans MongoDB");
-
-  app.use(session({
-    secret: "dev-secret-temporaire",
-    resave: false,
-    saveUninitialized: false,
-
-    cookie: {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    },
-
-  }));
-
-}
-
-// =========================
-// ADMIN SEED
-// =========================
-
+// Seed admin (si pas déjà créé)
 async function ensureAdminExists() {
-
-  if (!USE_MONGO) return;
-
   const email = (process.env.ADMIN_EMAIL || "").toLowerCase().trim();
   const pass = process.env.ADMIN_PASSWORD || "";
 
   if (!email || !pass) {
-    console.log("ℹ️ Admin seed ignoré (pas de variables)");
+    console.warn("⚠️ ADMIN_EMAIL / ADMIN_PASSWORD manquants dans .env (admin non créé)");
     return;
   }
 
   const existing = await User.findOne({ email });
-
   if (existing) {
-    console.log("ℹ️ Admin déjà existant");
+    console.log("ℹ️ Admin déjà présent :", email);
     return;
   }
 
   const passwordHash = await bcrypt.hash(pass, 12);
-
-  await User.create({
-    email,
-    passwordHash,
-    role: "admin"
-  });
-
-  console.log("✅ Admin créé");
+  await User.create({ email, passwordHash, role: "admin" });
+  console.log("✅ Admin créé :", email);
 }
 
-// =========================
-// ROUTES
-// =========================
-
+// Routes
 app.use("/", indexRouter);
 app.use("/artists", artistsRouter);
 app.use("/admin", adminRouter);
-app.use("/conseils", adviceRouter);
 
-// =========================
 // 404
-// =========================
+app.use((req, res) => res.status(404).send("404 - Page not found"));
 
-app.use((req, res) => {
-  res.status(404).send("404 - Page not found");
-});
+// Démarrage (connexion DB puis listen)
+const PORT = process.env.PORT || 3000;
 
-// =========================
-// START SERVER
-// =========================
+(async () => {
+  await connectDB();          // IMPORTANT : connectDB doit retourner une promise
+  await ensureAdminExists();  // crée admin si besoin
 
-async function startServer() {
-
-  if (USE_MONGO) {
-
-    const connectDB = require("./config/db");
-
-    await connectDB();
-
-    await ensureAdminExists();
-
-  } else {
-
-    console.log("⚠️ MongoDB désactivé");
-
-  }
-
-  app.listen(PORT, () => {
-    console.log(`🚀 http://localhost:${PORT}`);
-  });
-
-}
-
-startServer();
+  app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+})();
