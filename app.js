@@ -14,7 +14,9 @@ const User = require("./models/User");
 
 const indexRouter = require("./routes/indexRouter");
 const artistsRouter = require("./routes/artistsRouter");
-const adminRouter = require("./routes/adminRouter"); // on va le créer juste après
+const adminRouter = require("./routes/adminRouter"); 
+const adviceRouter = require("./routes/adviceRouter");
+const lexiqueRouter = require("./routes/lexiqueRouter");
 
 const app = express();
 
@@ -71,8 +73,11 @@ async function ensureAdminExists() {
 app.use("/", indexRouter);
 app.use("/artists", artistsRouter);
 app.use("/admin", adminRouter);
+app.use("/conseils", adviceRouter);
+app.use("/lexique", lexiqueRouter);
 
 // 404
+
 app.use((req, res) => res.status(404).send("404 - Page not found"));
 
 // Démarrage (connexion DB puis listen)

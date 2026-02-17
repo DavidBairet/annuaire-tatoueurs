@@ -1,0 +1,71 @@
+/* PAGE */
+.page {
+  padding: 40px 0;
+}
+
+/* bouton retour */
+.btnBack {
+  display: inline-block;
+  margin-bottom: 25px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #f2f0ff;
+
+  background: rgba(227,82,198,0.25);
+  border: 1px solid whitesmoke;
+
+  transition: 0.2s;
+}
+
+.btnBack:hover {
+  border-color: #e352c6;
+  transform: translateY(-2px);
+}
+
+/* TITRE */
+.pageTitle {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.pageSub {
+  color: rgba(242,240,255,0.7);
+  margin-bottom: 35px;
+  max-width: 600px;
+}
+
+/* LETTRE */
+.lexLetter {
+  color: #e352c6;
+  margin-top: 35px;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+/* CARD */
+.lexItem {
+  background: rgba(20,20,30,0.6);
+  border: 1px solid rgba(227,82,198,0.25);
+
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 15px;
+
+  transition: 0.2s;
+}
+
+.lexItem:hover {
+  border-color: #e352c6;
+  transform: translateY(-3px);
+}
+
+.lexItem h3 {
+  margin: 0 0 6px;
+  color: #f2f0ff;
+}
+
+.lexItem p {
+  margin: 0;
+  color: rgba(242,240,255,0.75);
+}
