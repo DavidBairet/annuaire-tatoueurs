@@ -75,6 +75,7 @@ app.use("/artists", artistsRouter);
 app.use("/admin", adminRouter);
 app.use("/conseils", adviceRouter);
 app.use("/lexique", lexiqueRouter);
+app.get("/inscription", (req, res) => res.redirect("/artists/apply"));
 
 // 404
 

@@ -17,7 +17,7 @@ function applyFilter(q) {
       card.dataset.name,
       card.dataset.city,
       card.dataset.styles,
-    ].join(" ");
+    ].join(" ").toLowerCase(); // ✅ important
 
     const match = query === "" || haystack.includes(query);
     card.hidden = !match;

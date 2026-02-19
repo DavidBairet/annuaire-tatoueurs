@@ -1,23 +1,67 @@
-<h1>Inscription artiste</h1>
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<form method="POST" action="/artists/apply">
-  <!-- honeypot anti-bot -->
-  <input type="text" name="website" style="display:none" autocomplete="off">
+  <title><%= title %></title>
 
-  <label>Nom / Studio</label>
-  <input name="name" required>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/inscription.css">
+</head>
+<body class="page--apply">
 
-  <label>Ville</label>
-  <input name="city" required>
+<header class="topbar topbar--minimal">
+  <div class="container topbar__inner">
 
-  <label>Styles (séparés par virgules)</label>
-  <input name="styles" placeholder="Fine line, Floral">
+    <a class="logo logo--center" href="/">
+      <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+      <span class="logo__text">Annuaire</span>
+    </a>
 
-  <label>Instagram</label>
-  <input name="instagram" placeholder="https://instagram.com/..." />
+  </div>
+</header>
 
-  <label>Contact (email/site)</label>
-  <input name="contact" />
+<main class="applySection">
+  <div class="container">
 
-  <button type="submit">Envoyer ma demande</button>
-</form>
+    <form class="applyForm" method="POST" action="/artists/apply">
+
+      <h1>Inscription artiste</h1>
+
+      <!-- honeypot anti-bot -->
+      <input type="text" name="website" style="display:none" autocomplete="off">
+
+      <label>Nom / Studio</label>
+      <input name="name" required>
+
+      <label>Ville</label>
+      <input name="city" required>
+
+      <label>telephone (falcutatif)</label>
+      <input name="telephone">
+
+      <label>Styles (séparés par virgules)</label>
+      <input name="styles" placeholder="Fine line, Floral">
+
+      <label>Instagram (falcutatif)</label>
+      <input name="instagram" placeholder="https://instagram.com/...">
+      
+      <label>faceBook (falcutatif)</label>
+      <input name="facebook" placeholder="https://facebook.com/...">
+
+      <label>site internet (falcutatif)</label>
+      <input name="site internet">
+
+      <label>Contact (email)</label>
+      <input name="contact">
+
+      <button type="submit">Envoyer ma demande</button>
+
+    </form>
+
+  </div>
+</main>
+
+</body>
+</html>

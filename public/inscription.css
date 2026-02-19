@@ -1,0 +1,94 @@
+/* ===== PAGE INSCRIPTION (overrides) ===== */
+
+body.page--apply .topbar{
+  background: transparent;
+  border-bottom: none;
+  backdrop-filter: none;
+  position: static;
+}
+
+body.page--apply .topbar__inner{
+  justify-content: center;
+  padding: 24px 0 6px;
+}
+
+
+/* Centre la page */
+body.page--apply .applySection{
+  min-height: calc(100vh - 130px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+/* Si tu gardes un <div class="container"> autour, ça centre pareil */
+body.page--apply .applySection > .container{
+  display: flex;
+  justify-content: center;
+}
+
+/* Carte formulaire */
+body.page--apply .applyForm{
+  width: min(540px, 100%);
+  margin: 0;
+  padding: 26px;
+  border-radius: 18px;
+
+  background: linear-gradient(180deg, rgba(18,18,26,.88), rgba(26,26,40,.96));
+  border: 1px solid rgba(227,82,198,0.22);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.60);
+}
+
+/* Titre */
+body.page--apply .applyForm h1{
+  margin: 0 0 18px;
+  font-size: 30px;
+}
+
+/* Labels / champs */
+body.page--apply .applyForm label{
+  display: block;
+  margin: 14px 0 6px;
+  font-size: 13px;
+  color: rgba(242,240,255,0.72);
+}
+
+body.page--apply .applyForm input{
+  width: 100%;
+  display: block;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(227,82,198,0.22);
+  background: rgba(10,10,18,0.75);
+  color: #f2f0ff;
+  outline: none;
+}
+
+body.page--apply .applyForm input::placeholder{
+  color: rgba(242,240,255,0.45);
+}
+
+body.page--apply .applyForm input:focus{
+  border-color: rgba(227,82,198,0.75);
+  box-shadow: 0 0 0 3px rgba(227,82,198,0.14);
+}
+
+/* Bouton */
+body.page--apply .applyForm button{
+  width: 100%;
+  display: block;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: none;
+  background: #e352c6;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+body.page--apply .applyForm button:hover{
+  background: #c93dad;
+}
