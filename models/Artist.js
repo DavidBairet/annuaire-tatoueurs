@@ -7,7 +7,7 @@ const artistSchema = new mongoose.Schema(
     styles: [{ type: String, trim: true, maxlength: 40 }],
     instagram: { type: String, trim: true, maxlength: 200 },
     contact: { type: String, trim: true, maxlength: 200 },
-
+    bio: { type: String, trim: true, maxlength: 1200 },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],

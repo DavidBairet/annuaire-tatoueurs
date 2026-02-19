@@ -1,0 +1,147 @@
+.artistPage{ padding: 28px 0 60px; }
+
+.btnBack{
+  display: inline-block;
+  margin-top: 14px;
+  text-decoration: none;
+  color: rgba(242,240,255,0.8);
+}
+
+.artistCard{
+  margin-top: 14px;
+  padding: 22px;
+  border-radius: 18px;
+
+  background: rgba(20,20,30,0.72);
+  border: 1px solid rgba(227,82,198,0.25);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.55);
+  backdrop-filter: blur(10px);
+}
+
+.artistHeader{
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.artistAvatar{
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(227,82,198,0.18);
+  border: 1px solid rgba(227,82,198,0.35);
+  color: #f2f0ff;
+  font-weight: 800;
+  font-size: 28px;
+  flex: 0 0 auto;
+}
+
+.artistName{
+  margin: 0;
+  font-size: 28px;
+}
+
+.artistMeta{
+  margin: 6px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  color: rgba(242,240,255,0.75);
+}
+
+.artistMeta .dot{ opacity: 0.6; }
+
+.artistBio{
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(227,82,198,0.18);
+}
+
+.artistBio h2{
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: rgba(242,240,255,0.92);
+}
+
+.artistBio p{
+  margin: 0;
+  line-height: 1.7;
+  color: rgba(242,240,255,0.82);
+  white-space: pre-wrap;
+}
+
+.artistGrid{
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.artistBlock{
+  border: 1px solid rgba(227,82,198,0.18);
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(0,0,0,0.18);
+}
+
+.artistBlock h3{
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: rgba(242,240,255,0.92);
+}
+
+.artistList{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.artistList li{
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+}
+
+.artistList .k{
+  color: rgba(242,240,255,0.65);
+  font-size: 13px;
+}
+
+.artistList .v a{
+  color: #f2f0ff;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(227,82,198,0.55);
+}
+
+.artistLinks{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pill{
+  display: inline-block;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(227,82,198,0.18);
+  border: 1px solid rgba(227,82,198,0.35);
+  color: #f2f0ff;
+  text-decoration: none;
+}
+
+.empty{
+  margin: 0;
+  color: rgba(242,240,255,0.6);
+  font-size: 13px;
+}
+
+@media (max-width: 780px){
+  .artistGrid{ grid-template-columns: 1fr; }
+}

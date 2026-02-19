@@ -13,26 +13,24 @@ function cleanList(v = "") {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean)
-    .slice(0, 20); // limite pour éviter abus
+    .slice(0, 20);
 }
 
 function cleanUrl(v = "") {
   const url = String(v).trim();
   if (!url) return "";
-  // ajoute https:// si l’utilisateur met juste "instagram.com/..."
   if (!/^https?:\/\//i.test(url)) return `https://${url}`;
   return url;
 }
 
 // =========================
 // LISTE + RECHERCHE (PUBLIC) => approved uniquement
-// + pagination simple
 // =========================
 router.get("/", async (req, res) => {
   try {
     const q = cleanText(req.query.q || "");
     const page = Math.max(parseInt(req.query.page || "1", 10), 1);
-    const limit = 12; // ajuste si tu veux
+    const limit = 12;
     const skip = (page - 1) * limit;
 
     const filter = {
@@ -81,50 +79,91 @@ router.get("/apply", (req, res) => {
 // =========================
 router.post("/apply", async (req, res) => {
   try {
-    // honeypot anti-bot
-    if (req.body.website && String(req.body.website).trim() !== "") {
+    // honeypot anti-bot (champ "honeypot")
+    if (req.body.honeypot && String(req.body.honeypot).trim() !== "") {
       return res.status(400).send("Erreur");
     }
 
-    // (optionnel) anti-bot temps minimal (ajoute un champ hidden "ts" dans le form)
-    // if (req.body.ts && Date.now() - Number(req.body.ts) < 1500) {
-    //   return res.status(400).send("Erreur");
-    // }
-
     const name = cleanText(req.body.name);
     const city = cleanText(req.body.city);
-    const styles = cleanList(req.body.styles);
-    const instagram = cleanUrl(req.body.instagram);
-    const contact = cleanText(req.body.contact);
 
-    // validations simples
+    const phone = cleanPhone(req.body.phone);
+
+    const styles = cleanList(req.body.styles);
+
+    const instagram = cleanUrl(req.body.instagram);
+    const facebook = cleanUrl(req.body.facebook);
+    const website = cleanUrl(req.body.website);
+
+    const email = cleanText(req.body.email);
+    const bio = cleanText(req.body.bio);
+
     if (name.length < 2 || name.length > 50) {
       return res.status(400).send("Nom requis (2-50).");
     }
     if (city.length < 2 || city.length > 50) {
       return res.status(400).send("Ville requise (2-50).");
     }
+    if (!email || email.length < 5 || email.length > 120) {
+      return res.status(400).send("Email requis.");
+    }
 
     await Artist.create({
       name,
       city,
+      phone,
       styles,
       instagram,
-      contact,
+      facebook,
+      website,
+      email,
+      bio,
       status: "pending",
     });
 
     res.render("artists/apply_success", { title: "Demande envoyée" });
   } catch (error) {
     console.error(error);
-
-    // Exemple si tu ajoutes un index unique plus tard (ex: instagram unique)
     if (error.code === 11000) {
       return res.status(400).send("Cet artiste semble déjà existant.");
     }
-
     res.status(500).send("Erreur lors de l'envoi de la demande");
   }
 });
+
+// =========================
+// FICHE ARTISTE (PUBLIC) => approved uniquement
+// ⚠️ IMPORTANT : toujours APRÈS /apply
+// =========================
+router.get("/:id", async (req, res) => {
+  try {
+    const artist = await Artist.findOne({
+      _id: req.params.id,
+      status: "approved",
+    });
+
+    if (!artist) {
+      return res.status(404).render("404", { title: "Artiste introuvable" });
+    }
+
+    res.render("artists/show", {
+      title: artist.name,
+      artist,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(404).render("404", { title: "Artiste introuvable" });
+  }
+});
+function cleanPhone(v = "") {
+  const digits = String(v).replace(/\D/g, "");
+
+  // format FR : 0612345678 → 06 12 34 56 78
+  if (digits.length === 10) {
+    return digits.replace(/(\d{2})(?=\d)/g, "$1 ").trim();
+  }
+
+  return digits;
+}
 
 module.exports = router;

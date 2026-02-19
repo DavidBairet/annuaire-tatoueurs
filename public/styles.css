@@ -1,28 +1,34 @@
-/* ===== RESET ===== */
+/* =========================
+   RESET
+   ========================= */
 *{ box-sizing:border-box; }
 html,body{ margin:0; padding:0; }
+
+:root{
+  --accent:#e352c6;
+  --border: rgba(227,82,198,0.28);
+  --muted: rgba(242,240,255,0.75);
+  --card: rgba(20,20,30,0.72);
+  --font: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
 body{
   font-family: var(--font);
   background:#0f0f16;
   color:#f2f0ff;
 }
 
-/* ===== THEME ===== */
-:root{
-  --accent:#e352c6;
-  --border: rgba(227,82,198,0.28);
-  --muted: rgba(242,240,255,0.75);
-  --card: rgba(20,20,30,0.72);
-   --font: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-}
-
-/* ===== CONTAINER ===== */
+/* =========================
+   CONTAINER
+   ========================= */
 .container{
   width: min(1100px, 92vw);
   margin: 0 auto;
 }
 
-/* ===== TOPBAR ===== */
+/* =========================
+   TOPBAR
+   ========================= */
 .topbar{
   position: sticky;
   top: 0;
@@ -39,7 +45,9 @@ body{
   gap: 14px;
 }
 
-/* ===== LOGO ===== */
+/* =========================
+   LOGO
+   ========================= */
 .logo{
   display:flex;
   align-items:center;
@@ -61,11 +69,14 @@ body{
   color:#f2f0ff;
 }
 
+/* Hover logo (sur les pages où ça a du sens) */
 .logo:hover .logo__text{
   color: var(--accent);
 }
 
-/* ===== MENU ===== */
+/* =========================
+   MENU
+   ========================= */
 .menu{
   display:flex;
   align-items:center;
@@ -93,13 +104,14 @@ body{
   color: var(--accent) !important;
 }
 
-/* ===== HERO ===== */
+/* =========================
+   HERO
+   ========================= */
 .hero{
   min-height: 70vh;
   display:flex;
   align-items:center;
   padding: 52px 0;
-
   background:
     linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(247, 242, 242, 0.137)),
     url("/images/hero.jpg") center/cover no-repeat;
@@ -136,7 +148,9 @@ body{
   flex-wrap: wrap;
 }
 
-/* ===== BUTTONS ===== */
+/* =========================
+   BUTTONS
+   ========================= */
 .btn{
   display:inline-block;
   padding: 12px 16px;
@@ -166,7 +180,9 @@ body{
   background: rgba(0,0,0,0.18);
 }
 
-/* ===== SECTION ===== */
+/* =========================
+   SECTION
+   ========================= */
 .section{
   padding: 54px 0;
 }
@@ -183,14 +199,18 @@ body{
   line-height: 1.7;
 }
 
-/* ===== FOOTER ===== */
+/* =========================
+   FOOTER
+   ========================= */
 .footer{
   padding: 22px 0;
   border-top: 1px solid rgba(255,255,255,0.08);
   color: rgba(242,240,255,0.6);
 }
 
-/* ===== SEARCH BAR ===== */
+/* =========================
+   SEARCH BAR
+   ========================= */
 .search{
   display:flex;
   gap: 10px;
@@ -231,7 +251,9 @@ body{
   color: var(--accent);
 }
 
-/* ===== PAGE HEAD ===== */
+/* =========================
+   PAGE HEAD / LIST
+   ========================= */
 .pageHead{
   display:flex;
   align-items:flex-end;
@@ -239,17 +261,22 @@ body{
   gap: 14px;
   margin-bottom: 18px;
 }
+
 .pageTitle{
   margin: 0;
   font-size: 34px;
 }
+
 .pageSub{
   margin: 6px 0 0;
   color: var(--muted);
 }
+
 .muted{ opacity: .50; }
 
-/* ===== CARDS LIST ===== */
+/* =========================
+   CARDS LIST
+   ========================= */
 .cards{
   display:grid;
   grid-template-columns: repeat(12, 1fr);
@@ -272,10 +299,12 @@ body{
   align-items:baseline;
   gap: 10px;
 }
+
 .cardArtist__title{
   margin: 0;
   font-size: 18px;
 }
+
 .cardArtist__meta{
   margin: 0;
   color: rgba(242,240,255,0.70);
@@ -304,7 +333,41 @@ body{
   margin: 0;
 }
 
-/* responsive */
+/* =========================
+   RESPONSIVE
+   ========================= */
 @media (max-width: 820px){
   .cardArtist{ grid-column: span 12; }
+}
+
+/* =========================
+   PAGES SPECIFIQUES
+   ========================= */
+
+/* Fiche artiste : topbar minimal */
+body.page--artist .topbar{
+  background: transparent;
+  border-bottom: none;
+}
+
+body.page--artist .topbar__inner{
+  justify-content: center;
+  padding: 18px 0 10px;
+}
+
+body.page--artist .logo__img{
+  height: 56px;
+}
+
+/* HOME : désactive l'effet hover sur le logo (IMPORTANT) */
+body.page--home .logo:hover .logo__text,
+body.page--home .logo:focus .logo__text,
+body.page--home .logo:focus-visible .logo__text{
+  color: #f2f0ff !important;
+  text-decoration: none !important;
+}
+
+body.page--home .logo,
+body.page--home .logo *{
+  cursor: default;
 }

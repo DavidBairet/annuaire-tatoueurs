@@ -3,65 +3,68 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title><%= title %></title>
 
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/inscription.css">
 </head>
+
 <body class="page--apply">
+  <header class="topbar topbar--minimal">
+    <div class="container topbar__inner">
+      <a class="logo logo--center" href="/">
+        <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+        <span class="logo__text">Retour à l'Annuaire</span>
+      </a>
+    </div>
+  </header>
 
-<header class="topbar topbar--minimal">
-  <div class="container topbar__inner">
+  <main class="applySection">
+    <div class="container">
+      <form class="applyForm" method="POST" action="/artists/apply">
+        <h1>Inscription artiste</h1>
 
-    <a class="logo logo--center" href="/">
-      <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
-      <span class="logo__text">Annuaire</span>
-    </a>
+        <!-- honeypot anti-bot -->
+        <div class="hp" aria-hidden="true">
+            <input type="text" name="honeypot" tabindex="-1" autocomplete="off">
+        </div>
 
-  </div>
-</header>
+        <label>Nom / Studio</label>
+        <input name="name" required autocomplete="organization">
 
-<main class="applySection">
-  <div class="container">
+        <label>Ville</label>
+        <input name="city" required autocomplete="address-level2">
 
-    <form class="applyForm" method="POST" action="/artists/apply">
+        <label>Téléphone (facultatif)</label>
+       <input name="phone" type="tel" autocomplete="tel" placeholder="06 12 34 56 78" inputmode="tel">
 
-      <h1>Inscription artiste</h1>
 
-      <!-- honeypot anti-bot -->
-      <input type="text" name="website" style="display:none" autocomplete="off">
+        <label>Styles (séparés par virgules)</label>
+        <input name="styles" placeholder="Fine line, Floral" required>
 
-      <label>Nom / Studio</label>
-      <input name="name" required>
+        <label>Instagram (facultatif)</label>
+        <input name="instagram" type="url" placeholder="https://instagram.com/...">
 
-      <label>Ville</label>
-      <input name="city" required>
+        <label>Facebook (facultatif)</label>
+        <input name="facebook" type="url" placeholder="https://facebook.com/...">
 
-      <label>telephone (falcutatif)</label>
-      <input name="telephone">
+        <label>Site internet (facultatif)</label>
+        <input name="website" type="url" placeholder="https://...">
 
-      <label>Styles (séparés par virgules)</label>
-      <input name="styles" placeholder="Fine line, Floral">
+        <label>Email de contact</label>
+        <input name="email" type="email" required autocomplete="email">
+        
+        <label>Bio / présentation</label>
+        <textarea
+          name="bio"
+          rows="6"
+          class="textareaBio"
+          placeholder="Présentez votre univers, votre expérience, vos spécialités..."></textarea>
 
-      <label>Instagram (falcutatif)</label>
-      <input name="instagram" placeholder="https://instagram.com/...">
-      
-      <label>faceBook (falcutatif)</label>
-      <input name="facebook" placeholder="https://facebook.com/...">
 
-      <label>site internet (falcutatif)</label>
-      <input name="site internet">
-
-      <label>Contact (email)</label>
-      <input name="contact">
-
-      <button type="submit">Envoyer ma demande</button>
-
-    </form>
-
-  </div>
-</main>
-
+        <button type="submit">Envoyer ma demande</button>
+      </form>
+    </div>
+  </main>
 </body>
 </html>

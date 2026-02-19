@@ -87,7 +87,22 @@
             <div>
               <strong><%= a.name %></strong>
               <div class="meta">📍 <%= a.city %> <% if (a.styles?.length) { %> — 🎨 <%= a.styles.join(", ") %> <% } %></div>
-              <div class="meta"><% if (a.instagram) { %><%= a.instagram %><% } %> <% if (a.contact) { %> — <%= a.contact %><% } %></div>
+              <<div class="meta">
+  <% if (a.instagram) { %><%= a.instagram %><% } %>
+  <% if (a.facebook) { %> — <%= a.facebook %><% } %>
+  <% if (a.website) { %> — <%= a.website %><% } %>
+  <% const email = a.email || a.contact; %>
+  <% if (email) { %> — <%= email %><% } %>
+</div>
+
+<% if (a.phone) { %>
+  <div class="meta">📞 <%= a.phone %></div>
+<% } %>
+
+<% if (a.bio) { %>
+  <div class="meta">📝 <%= a.bio.slice(0, 140) %><%= a.bio.length > 140 ? "…" : "" %></div>
+<% } %>
+
             </div>
             <div class="meta"><%= new Date(a.createdAt).toLocaleString("fr-FR") %></div>
           </div>

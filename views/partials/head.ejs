@@ -1,23 +1,11 @@
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-        <%= title %>
-    </title>
-    <link rel="stylesheet" href="/styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/styles.css">
+
+  <% if (typeof css !== "undefined") { %>
+    <link rel="stylesheet" href="<%= css %>">
+  <% } %>
 </head>
-<header class="topbar">
-  <div class="container topbar__inner">
-
-    <a class="logo" href="/">
-      <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
-      <span class="logo__text">Annuaire</span>
-    </a>
-
-    <nav class="menu">
-      <a href="/artists">Tatoueurs</a>
-      <a href="/inscription">Inscription artiste</a>
-    </nav>
-
-  </div>
-</header>

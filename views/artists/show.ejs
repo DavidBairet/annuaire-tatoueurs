@@ -1,21 +1,94 @@
 <!DOCTYPE html>
 <html lang="fr">
-<%- include("../partials/head") %>
+  <%- include("../partials/head", { title: artist.name, css: "/artists.css" }) %>
 
-    <body>
-        <%- include("../partials/header") %>
-            <main class="container">
-                <h1>
-                    <%= artist.name %>
-                </h1>
-                <p>
-                    <%= artist.city %>
-                </p>
-                <p>
-                    <%= (artist.styles || []).join(", ") %></p>
-      <a href=" /artists">← Retour</a>
-            </main>
-            <%- include("../partials/footer") %>
-    </body>
+  <body class="page--artist">
 
+    <!-- Header minimal (pas le gros hero) -->
+    <header class="topbar topbar--minimal">
+      <div class="container topbar__inner">
+        <a class="logo logo--center" href="/">
+          <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+          <span class="logo__text">Accueil</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="artistProfile container">
+
+  
+
+  <section class="artistCard">
+
+    <!-- HEADER -->
+    <header class="artistHeader">
+
+      <div class="artistAvatar">
+        <% if (artist.avatar) { %>
+          <img src="<%= artist.avatar %>" alt="<%= artist.name %>">
+        <% } else { %>
+          <div class="avatarPlaceholder">
+            <%= artist.name.charAt(0).toUpperCase() %>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="artistInfo">
+
+        <h1 class="artistName">
+          <%= artist.name %>
+        </h1>
+
+        <p class="artistCity">
+          📍 <%= artist.city || "Ville non renseignée" %>
+        </p>
+
+        <% if (artist.styles && artist.styles.length) { %>
+          <div class="artistStyles">
+            <% artist.styles.forEach(style => { %>
+              <span class="styleTag"><%= style %></span>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <% if (artist.instagram) { %>
+          <a href="<%= artist.instagram %>" target="_blank" class="btnInstagram">
+            Voir Instagram
+          </a>
+        <% } %>
+
+      </div>
+
+    </header>
+
+
+    <!-- BIO -->
+    <section class="artistBio">
+
+      <h2>À propos</h2>
+
+      <p>
+        <%= artist.bio || "Ce tatoueur n'a pas encore ajouté de description." %>
+      </p>
+
+    </section>
+
+
+    <!-- META -->
+    <footer class="artistMeta">
+
+      <span>
+        Inscrit le :
+        <%= new Date(artist.createdAt).toLocaleDateString("fr-FR") %>
+      </span>
+
+   
+
+  </section>
+
+</main>
+
+
+    <%- include("../partials/footer") %>
+  </body>
 </html>

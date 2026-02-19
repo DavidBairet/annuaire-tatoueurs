@@ -14,13 +14,10 @@
 
     <a class="logo" href="/">
       <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
-      <span class="logo__text">Annuaire</span>
+      <span class="logo__text">Retour à l'Annuaire</span>
     </a>
 
-    <nav class="menu">
-      <a href="/artists">Tatoueurs</a>
-      <a href="/inscription">Inscription artiste</a>
-    </nav>
+    
 
   </div>
 </header>
@@ -58,9 +55,10 @@
       <section class="cards" id="cards">
         <% artists.forEach(a => { %>
           <article class="cardArtist"
-            data-name="<%= a.name.toLowerCase() %>"
-            data-city="<%= a.city.toLowerCase() %>"
-            data-styles="<%= (a.styles || []).join(' ').toLowerCase() %>">
+           data-name="<%= (a.name || '').toLowerCase() %>"
+           data-city="<%= (a.city || '').toLowerCase() %>"
+           data-styles="<%= (Array.isArray(a.styles) ? a.styles.join(' ') : (a.styles || '')).toLowerCase() %>">
+
             <div class="cardArtist__top">
               <h2 class="cardArtist__title"><%= a.name %></h2>
               <p class="cardArtist__meta"><span class="dot"></span> <%= a.city %></p>
@@ -72,13 +70,23 @@
               <% }) %>
             </div>
 
-            <div class="actions">
-              <a class="btn btn--primary" href="<%= a.instagram %>" target="_blank" rel="noopener">Instagram</a>
-              <a class="btn" href="mailto:<%= a.contact %>">Contacter</a>
-            </div>
-          </article>
-        <% }) %>
-      </section>
+           <div class="actions">
+  <% if (a.instagram) { %>
+    <a class="btn btn--primary" href="<%= a.instagram %>" target="_blank" rel="noopener">Instagram</a>
+  <% } %>
+
+  <% const email = a.email || a.contact; %>
+  <% if (email) { %>
+    <a class="btn" href="mailto:<%= email %>">Contacter</a>
+  <% } %>
+
+  <a class="btn btn--ghost" href="/artists/<%= a._id %>">Voir la fiche</a>
+</div>
+
+         </article>
+          <% }) %>
+            </section>
+
 
       <section class="empty" id="empty" <% if (artists.length) { %>hidden<% } %>>
         <h3>Aucun résultat</h3>
