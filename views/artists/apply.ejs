@@ -26,7 +26,7 @@
 
         <!-- honeypot anti-bot -->
         <div class="hp" aria-hidden="true">
-            <input type="text" name="honeypot" tabindex="-1" autocomplete="off">
+          <input type="text" name="honeypot" tabindex="-1" autocomplete="off">
         </div>
 
         <label>Nom / Studio</label>
@@ -35,9 +35,25 @@
         <label>Ville</label>
         <input name="city" required autocomplete="address-level2">
 
-        <label>Téléphone (facultatif)</label>
-       <input name="phone" type="tel" autocomplete="tel" placeholder="06 12 34 56 78" inputmode="tel">
+        <label>Code postal</label>
+        <input
+          name="postalCode"
+          required
+          inputmode="numeric"
+          pattern="[0-9]{5}"
+          maxlength="5"
+          placeholder="Ex: 47000"
+          autocomplete="postal-code"
+        >
 
+        <label>Téléphone (facultatif)</label>
+        <input
+          name="phone"
+          type="tel"
+          autocomplete="tel"
+          placeholder="06 12 34 56 78"
+          inputmode="tel"
+        >
 
         <label>Styles (séparés par virgules)</label>
         <input name="styles" placeholder="Fine line, Floral" required>
@@ -53,14 +69,13 @@
 
         <label>Email de contact</label>
         <input name="email" type="email" required autocomplete="email">
-        
+
         <label>Bio / présentation</label>
         <textarea
           name="bio"
           rows="6"
           class="textareaBio"
           placeholder="Présentez votre univers, votre expérience, vos spécialités..."></textarea>
-
 
         <button type="submit">Envoyer ma demande</button>
       </form>

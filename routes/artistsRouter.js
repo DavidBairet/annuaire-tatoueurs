@@ -34,17 +34,21 @@ router.get("/", async (req, res) => {
     const skip = (page - 1) * limit;
 
     const filter = {
-      status: "approved",
-      ...(q
-        ? {
-            $or: [
-              { name: { $regex: q, $options: "i" } },
-              { city: { $regex: q, $options: "i" } },
-              { styles: { $regex: q, $options: "i" } },
-            ],
-          }
-        : {}),
-    };
+  status: "approved",
+  ...(q
+    ? {
+        $or: [
+          { name: { $regex: q, $options: "i" } },
+          { city: { $regex: q, $options: "i" } },
+          { styles: { $regex: q, $options: "i" } },
+
+          // ✅ CP + département : match début (17 → 17000 / 750 → 75000)
+          { postalCode: { $regex: "^" + q, $options: "i" } },
+          { department: { $regex: "^" + q, $options: "i" } },
+        ],
+      }
+    : {}),
+};
 
     const [artists, total] = await Promise.all([
       Artist.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
@@ -86,7 +90,10 @@ router.post("/apply", async (req, res) => {
 
     const name = cleanText(req.body.name);
     const city = cleanText(req.body.city);
+    const postalCode = cleanText(req.body.postalCode);
 
+    // ✅ département auto (47000 => "47")
+    const department = postalCode ? postalCode.slice(0, 2) : "";  
     const phone = cleanPhone(req.body.phone);
 
     const styles = cleanList(req.body.styles);
@@ -104,22 +111,27 @@ router.post("/apply", async (req, res) => {
     if (city.length < 2 || city.length > 50) {
       return res.status(400).send("Ville requise (2-50).");
     }
+    if (!/^\d{5}$/.test(postalCode)) {
+     return res.status(400).send("Code postal invalide (5 chiffres).");
+    }
     if (!email || email.length < 5 || email.length > 120) {
       return res.status(400).send("Email requis.");
     }
 
-    await Artist.create({
-      name,
-      city,
-      phone,
-      styles,
-      instagram,
-      facebook,
-      website,
-      email,
-      bio,
-      status: "pending",
-    });
+   await Artist.create({
+  name,
+  city,
+  postalCode,
+  department,
+  phone,
+  styles,
+  instagram,
+  facebook,
+  website,
+  email,
+  bio,
+  status: "pending",
+});
 
     res.render("artists/apply_success", { title: "Demande envoyée" });
   } catch (error) {

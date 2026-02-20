@@ -9,92 +9,91 @@
 </head>
 <body>
 
- <header class="topbar">
+<header class="topbar">
   <div class="container topbar__inner">
-
     <a class="logo" href="/">
       <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
       <span class="logo__text">Retour à l'Annuaire</span>
     </a>
-
-    
-
   </div>
 </header>
 
-
-  <main class="section">
-    <div class="container">
-      <div class="pageHead">
-        <div>
-          <h1 class="pageTitle">Tatoueurs</h1>
-          <p class="pageSub">
-            <span id="countLine"><%= artists.length %></span> résultat(s)
-            <% if (q) { %>
-              pour “<strong><%= q %></strong>”
-            <% } %>
+<main class="section">
+  <div class="container">
+    <div class="pageHead">
+      <div>
+        <h1 class="pageTitle">Tatoueurs</h1>
+        <p class="pageSub">
+          <span id="countLine"><%= total %></span> résultat(s)
+          <% if (q) { %>
+            pour “<strong><%= q %></strong>”
+          <% } %>
+          <% if (!q) { %>
             <span class="muted">— total: <%= total %></span>
-          </p>
-        </div>
+          <% } %>
+        </p>
       </div>
-
-      <form class="search search--page" action="/artists" method="GET">
-        <input
-          id="searchInput"
-          class="search__input"
-          type="search"
-          name="q"
-          value="<%= q %>"
-          placeholder="Nom, ville, style…"
-          autocomplete="off"
-        />
-        <button class="search__btn" type="submit">Rechercher</button>
-        <a class="btn btn--ghost" href="/artists">Reset</a>
-      </form>
-
-      <section class="cards" id="cards">
-        <% artists.forEach(a => { %>
-          <article class="cardArtist"
-           data-name="<%= (a.name || '').toLowerCase() %>"
-           data-city="<%= (a.city || '').toLowerCase() %>"
-           data-styles="<%= (Array.isArray(a.styles) ? a.styles.join(' ') : (a.styles || '')).toLowerCase() %>">
-
-            <div class="cardArtist__top">
-              <h2 class="cardArtist__title"><%= a.name %></h2>
-              <p class="cardArtist__meta"><span class="dot"></span> <%= a.city %></p>
-            </div>
-
-            <div class="tags">
-              <% (a.styles || []).forEach(s => { %>
-                <span class="tag"><%= s %></span>
-              <% }) %>
-            </div>
-
-           <div class="actions">
-  <% if (a.instagram) { %>
-    <a class="btn btn--primary" href="<%= a.instagram %>" target="_blank" rel="noopener">Instagram</a>
-  <% } %>
-
-  <% const email = a.email || a.contact; %>
-  <% if (email) { %>
-    <a class="btn" href="mailto:<%= email %>">Contacter</a>
-  <% } %>
-
-  <a class="btn btn--ghost" href="/artists/<%= a._id %>">Voir la fiche</a>
-</div>
-
-         </article>
-          <% }) %>
-            </section>
-
-
-      <section class="empty" id="empty" <% if (artists.length) { %>hidden<% } %>>
-        <h3>Aucun résultat</h3>
-        <p>Essaie une autre ville, un style, ou le nom d’un artiste.</p>
-      </section>
     </div>
-  </main>
 
-  <script src="/artists.js"></script>
+    <form class="search search--page" action="/artists" method="GET" id="searchForm">
+      <input
+        id="searchInput"
+        class="search__input"
+        type="search"
+        name="q"
+        value="<%= q %>"
+        placeholder="Nom, ville, style… , code postal, département"
+        autocomplete="off"
+      />
+      <button class="search__btn" type="submit" id="searchBtn">Rechercher</button>
+
+      <% if (q) { %>
+        <a class="btn btn--ghost" href="/artists" aria-label="Réinitialiser la recherche">Reset</a>
+      <% } %>
+    </form>
+
+    <section class="cards" id="cards">
+      <% artists.forEach(a => { %>
+        <article class="cardArtist"
+          data-name="<%= (a.name || '').toLowerCase() %>"
+          data-city="<%= (a.city || '').toLowerCase() %>"
+          data-styles="<%= (Array.isArray(a.styles) ? a.styles.join(' ') : (a.styles || '')).toLowerCase() %>">
+
+          <div class="cardArtist__top">
+            <h2 class="cardArtist__title"><%= a.name %></h2>
+            <p class="cardArtist__meta"><span class="dot"></span> <%= a.city %></p>
+          </div>
+
+          <div class="tags">
+            <% (a.styles || []).forEach(s => { %>
+              <span class="tag"><%= s %></span>
+            <% }) %>
+          </div>
+
+          <div class="actions">
+            <% if (a.instagram) { %>
+              <a class="btn btn--primary" href="<%= a.instagram %>" target="_blank" rel="noopener">Instagram</a>
+            <% } %>
+
+            <% const email = a.email || a.contact; %>
+            <% if (email) { %>
+              <a class="btn" href="mailto:<%= email %>">Contacter</a>
+            <% } %>
+
+            <a class="btn btn--ghost" href="/artists/<%= a._id %>">Voir la fiche</a>
+          </div>
+
+        </article>
+      <% }) %>
+    </section>
+
+    <section class="empty" id="empty" <% if (artists.length) { %>hidden<% } %>>
+      <h3>Aucun résultat</h3>
+      <p>Essaie une autre ville, un style, un département (ex: 47) ou un code postal.</p>
+    </section>
+  </div>
+</main>
+
+<script src="/artists.js"></script>
 </body>
 </html>
