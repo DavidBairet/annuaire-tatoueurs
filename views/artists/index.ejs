@@ -28,37 +28,29 @@
           <% if (q) { %>
             pour “<strong><%= q %></strong>”
           <% } %>
-          <% if (!q) { %>
-            <span class="muted">— total: <%= total %></span>
-          <% } %>
         </p>
       </div>
     </div>
 
-    <form class="search search--page" action="/artists" method="GET" id="searchForm">
+    <form class="search search--page" action="/artists" method="GET">
       <input
-        id="searchInput"
         class="search__input"
         type="search"
         name="q"
-        value="<%= q %>"
-        placeholder="Nom, ville, style… , code postal, département"
+        value="<%= q || '' %>"
+        placeholder="Nom, ville, style, code postal, département"
         autocomplete="off"
       />
-      <button class="search__btn" type="submit" id="searchBtn">Rechercher</button>
+      <button class="search__btn" type="submit">Rechercher</button>
 
       <% if (q) { %>
-        <a class="btn btn--ghost" href="/artists" aria-label="Réinitialiser la recherche">Reset</a>
+        <a class="btn btn--ghost" href="/artists">Reset</a>
       <% } %>
     </form>
 
-    <section class="cards" id="cards">
+    <section class="cards">
       <% artists.forEach(a => { %>
-        <article class="cardArtist"
-          data-name="<%= (a.name || '').toLowerCase() %>"
-          data-city="<%= (a.city || '').toLowerCase() %>"
-          data-styles="<%= (Array.isArray(a.styles) ? a.styles.join(' ') : (a.styles || '')).toLowerCase() %>">
-
+        <article class="cardArtist">
           <div class="cardArtist__top">
             <h2 class="cardArtist__title"><%= a.name %></h2>
             <p class="cardArtist__meta"><span class="dot"></span> <%= a.city %></p>
@@ -82,18 +74,35 @@
 
             <a class="btn btn--ghost" href="/artists/<%= a._id %>">Voir la fiche</a>
           </div>
-
         </article>
       <% }) %>
     </section>
 
-    <section class="empty" id="empty" <% if (artists.length) { %>hidden<% } %>>
-      <h3>Aucun résultat</h3>
-      <p>Essaie une autre ville, un style, un département (ex: 47) ou un code postal.</p>
-    </section>
+    <% if (!artists.length) { %>
+      <section class="empty">
+        <h3>Aucun résultat</h3>
+        <p>Essaie une autre ville, un style, un département (ex: 47) ou un code postal.</p>
+      </section>
+    <% } %>
+
+    <% if (totalPages > 1) { %>
+      <nav class="pagination">
+        <% const qs = q ? ("&q=" + encodeURIComponent(q)) : ""; %>
+
+        <% if (page > 1) { %>
+          <a class="btn btn--ghost" href="/artists?page=<%= page - 1 %><%= qs %>">← Précédent</a>
+        <% } %>
+
+        <span class="muted">Page <%= page %> / <%= totalPages %></span>
+
+        <% if (page < totalPages) { %>
+          <a class="btn btn--ghost" href="/artists?page=<%= page + 1 %><%= qs %>">Suivant →</a>
+        <% } %>
+      </nav>
+    <% } %>
+
   </div>
 </main>
 
-<script src="/artists.js"></script>
 </body>
 </html>

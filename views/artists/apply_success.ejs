@@ -1,3 +1,8 @@
 <h1>Demande envoyée ✅</h1>
 <p>Merci ! Ta demande est en attente de validation par un admin.</p>
 <a href="/">Retour accueil</a>
+
+<% if (verifyUrl) { %>
+  <p><strong>Mode DEV :</strong> lien de vérification :</p>
+  <p><a href="<%= verifyUrl %>"><%= verifyUrl %></a></p>
+<% } %>
