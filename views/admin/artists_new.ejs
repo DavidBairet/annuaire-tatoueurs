@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/admin.css" />
+  <link rel="stylesheet" href="/admin_artist_new.css" />
+</head>
+
+<body class="adminPage">
+  <header class="adminTopbar">
+    <div class="container adminTopbar__inner">
+      <div>
+        <h1 class="adminTitle">Ajouter un artiste</h1>
+        <p class="adminSubtitle">Ajout manuel (carte de visite) — visible directement dans l’annuaire</p>
+      </div>
+
+      <div class="adminTopbar__actions">
+        <a class="btn" href="/admin">↩ Retour dashboard</a>
+        <form method="POST" action="/admin/logout">
+          <button class="btn" type="submit">Logout</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main class="adminMain">
+    <div class="container">
+      <form class="adminCard adminForm" method="POST" action="/admin/artists">
+        <div class="grid">
+          <div class="field">
+            <label for="name">Nom / Studio <span class="req">*</span></label>
+            <input id="name" name="name" required minlength="2" maxlength="80" autocomplete="organization" />
+          </div>
+          <div class="field field--full">
+            <label for="address1">Adresse *</label>
+            <input id="address1" name="address1" required placeholder="12 rue Victor Hugo">
+          </div>
+
+          <div class="field field--full">
+            <label for="address2">Complément d'adresse</label>
+            <input id="address2" name="address2" placeholder="Bâtiment A, étage 2">
+          </div>
+          <div class="field">
+            <label for="city">Ville <span class="req">*</span></label>
+            <input id="city" name="city" required minlength="2" maxlength="80" autocomplete="address-level2" />
+          </div>
+
+          <div class="field">
+            <label for="postalCode">Code postal</label>
+            <input id="postalCode" name="postalCode" inputmode="numeric" maxlength="10" placeholder="47000" autocomplete="postal-code" />
+          </div>
+
+          <div class="field">
+            <label for="department">Département</label>
+            <input id="department" name="department" maxlength="50" placeholder="47" />
+          </div>
+
+          <div class="field">
+            <label for="phone">Téléphone</label>
+            <input id="phone" name="phone" maxlength="30" placeholder="06 12 34 56 78" autocomplete="tel" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email (facultatif)</label>
+            <input id="email" name="email" type="email" maxlength="200" placeholder="contact@studio.fr" autocomplete="email" />
+          </div>
+
+          <div class="field field--full">
+            <label for="styles">Styles (séparés par virgules)</label>
+            <input id="styles" name="styles" placeholder="Fine line, Floral, Ornemental…" />
+          </div>
+
+          <div class="field">
+            <label for="instagram">Instagram</label>
+            <input id="instagram" name="instagram" placeholder="https://instagram.com/..." />
+          </div>
+
+          <div class="field">
+            <label for="facebook">Facebook</label>
+            <input id="facebook" name="facebook" placeholder="https://facebook.com/..." />
+          </div>
+
+          <div class="field field--full">
+            <label for="website">Site web</label>
+            <input id="website" name="website" placeholder="https://..." />
+          </div>
+
+          <div class="field field--full">
+            <label for="bio">Bio</label>
+            <textarea id="bio" name="bio" rows="6" maxlength="1200" placeholder="Présentation rapide de l’artiste / du studio…"></textarea>
+          </div>
+        </div>
+
+        <div class="formActions">
+          <button class="btn btnPrimary" type="submit">✅ Ajouter</button>
+          <a class="btn" href="/admin">Annuler</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

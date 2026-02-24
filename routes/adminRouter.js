@@ -1,3 +1,4 @@
+// routes/adminRouter.js
 const express = require("express");
 const bcrypt = require("bcrypt");
 const csrf = require("csurf");
@@ -13,7 +14,9 @@ function requireAdmin(req, res, next) {
   return res.redirect("/admin/login");
 }
 
-// GET login
+// =========================
+// LOGIN
+// =========================
 router.get("/login", csrfProtection, (req, res) => {
   res.render("admin/login", {
     title: "Admin - Login",
@@ -22,7 +25,6 @@ router.get("/login", csrfProtection, (req, res) => {
   });
 });
 
-// POST login
 router.post("/login", csrfProtection, async (req, res) => {
   const email = (req.body.email || "").toLowerCase().trim();
   const password = req.body.password || "";
@@ -49,7 +51,9 @@ router.post("/login", csrfProtection, async (req, res) => {
   res.redirect("/admin");
 });
 
-// ✅ DASHBOARD avec recherche + onglets via query
+// =========================
+// DASHBOARD (liste + recherche)
+// =========================
 router.get("/", requireAdmin, async (req, res) => {
   const q = (req.query.q || "").trim();
   const status = (req.query.status || "pending").trim();
@@ -58,10 +62,16 @@ router.get("/", requireAdmin, async (req, res) => {
     ? {
         $or: [
           { name: { $regex: q, $options: "i" } },
+          { address1: { $regex: q, $options: "i" } },
+          { address2: { $regex: q, $options: "i" } },
           { city: { $regex: q, $options: "i" } },
+          { postalCode: { $regex: q, $options: "i" } },
+          { department: { $regex: q, $options: "i" } },
           { styles: { $regex: q, $options: "i" } },
           { instagram: { $regex: q, $options: "i" } },
-          { contact: { $regex: q, $options: "i" } },
+          { facebook: { $regex: q, $options: "i" } },
+          { website: { $regex: q, $options: "i" } },
+          { email: { $regex: q, $options: "i" } },
         ],
       }
     : {};
@@ -85,7 +95,77 @@ router.get("/", requireAdmin, async (req, res) => {
   });
 });
 
-// Actions
+// =========================
+// AJOUT MANUEL ARTISTE (ADMIN)
+// =========================
+router.get("/artists/new", requireAdmin, (req, res) => {
+  res.render("admin/artists_new", { title: "Ajouter un artiste" });
+});
+
+router.post("/artists", requireAdmin, async (req, res) => {
+  try {
+    const cleanText = (v = "") => String(v).trim();
+    const cleanList = (v = "") =>
+      String(v)
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .slice(0, 20);
+
+    const name = cleanText(req.body.name);
+    const address1 = cleanText(req.body.address1);
+    const address2 = cleanText(req.body.address2);
+
+    const city = cleanText(req.body.city);
+    const postalCode = cleanText(req.body.postalCode);
+    const department = cleanText(req.body.department);
+    const phone = cleanText(req.body.phone);
+
+    const styles = cleanList(req.body.styles);
+
+    const instagram = cleanText(req.body.instagram);
+    const facebook = cleanText(req.body.facebook);
+    const website = cleanText(req.body.website);
+
+    const emailRaw = cleanText(req.body.email);
+    const email = emailRaw ? emailRaw.toLowerCase() : null;
+
+    const bio = cleanText(req.body.bio);
+
+    if (name.length < 2) return res.status(400).send("Nom requis.");
+    if (address1.length < 3) return res.status(400).send("Adresse requise.");
+    if (city.length < 2) return res.status(400).send("Ville requise.");
+
+    const artist = await Artist.create({
+      name,
+      address1,
+      address2,
+      city,
+      postalCode,
+      department,
+      phone,
+      styles,
+      instagram,
+      facebook,
+      website,
+      email,               // null si vide
+      bio,
+      status: "approved",  // ✅ visible direct
+      emailVerified: true, // ✅ ok (ajout admin)
+      source: "admin",
+    });
+
+    return res.redirect(`/artists/${artist._id}`);
+  } catch (err) {
+    console.error(err);
+    if (err.code === 11000) return res.status(400).send("Cet email est déjà utilisé.");
+    return res.status(500).send("Erreur lors de la création.");
+  }
+});
+
+// =========================
+// ACTIONS (approve/reject/pending/delete)
+// =========================
 router.post("/artists/:id/approve", requireAdmin, async (req, res) => {
   await Artist.findByIdAndUpdate(req.params.id, { status: "approved" });
   res.redirect("/admin");
@@ -106,7 +186,9 @@ router.post("/artists/:id/delete", requireAdmin, async (req, res) => {
   res.redirect("/admin");
 });
 
-// Logout
+// =========================
+// LOGOUT
+// =========================
 router.post("/logout", requireAdmin, (req, res) => {
   req.session.destroy(() => res.redirect("/admin/login"));
 });
