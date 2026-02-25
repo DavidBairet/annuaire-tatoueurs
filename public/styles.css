@@ -371,3 +371,95 @@ body.page--home .logo,
 body.page--home .logo *{
   cursor: default;
 }
+/* =========================
+   CTA PREMIUM (HOME)
+   ========================= */
+.ctaPremium{
+  padding: 34px 0;
+}
+
+.ctaPremium__card{
+  padding: 28px;
+  border-radius: 22px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(18,18,26,0.88),
+    rgba(26,26,40,0.92)
+  );
+
+  border: 1px solid rgba(227,82,198,0.28);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+  backdrop-filter: blur(10px);
+}
+
+.ctaPremium__title{
+  margin: 0 0 10px;
+  font-size: 26px;
+  line-height: 1.15;
+  color: #ffffff;
+}
+
+.ctaPremium__subtitle{
+  margin: 0 0 18px;
+  color: rgba(242,240,255,0.85);
+  line-height: 1.7;
+  max-width: 72ch;
+  font-size: 16px;
+}
+
+.ctaPremium__benefits{
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.benefit{
+  grid-column: span 6;
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  background: rgba(227,82,198,0.08);
+  border: 1px solid rgba(227,82,198,0.18);
+  color: rgba(242,240,255,0.92);
+  font-weight: 650;
+  font-size: 14px;
+}
+
+.ctaPremium__actions{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 780px){
+  .ctaPremium__card{
+    padding: 20px;
+  }
+  .ctaPremium__title{
+    font-size: 22px;
+  }
+  .benefit{
+    grid-column: span 12;
+  }
+}
+
+/* =========================
+   (OPTIONNEL) Menu CTA
+   - met en avant "Inscription artiste"
+   ========================= */
+.menu a[href="/artists/apply"]{
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(227,82,198,0.35);
+  background: rgba(227,82,198,0.10);
+  color: #ffffff;
+}
+
+.menu a[href="/artists/apply"]:hover{
+  border-color: rgba(227,82,198,0.75);
+  background: rgba(227,82,198,0.16);
+  color: var(--accent);
+}

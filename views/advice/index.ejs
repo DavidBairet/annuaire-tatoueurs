@@ -2,78 +2,105 @@
 <html lang="fr">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>
-        <%= title %>
-    </title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
 
-    <link rel="stylesheet" href="/styles.css" />
-    <link rel="stylesheet" href="/advice.css" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/advice.css" />
 </head>
 
 <body>
 
-    <main class="container advice">
-        <a href="/" class="backLink">← Retour à l'annuaire</a>
+  <main class="container advice">
 
-        <header class="adviceHeader">
-            <div>
-                <p class="kicker">Guides & bonnes pratiques</p>
-                <h1>
-                    <%= title %>
-                </h1>
-                <p class="muted">Des conseils simples pour préparer ton tatouage, choisir un pro, et bien cicatriser.
-                </p>
+    <a href="/" class="backLink">← Retour à l'annuaire</a>
+
+    <header class="adviceHeader">
+      <div>
+        <p class="kicker">Guides & bonnes pratiques</p>
+        <h1><%= title %></h1>
+        <p class="muted">
+          Des conseils simples pour préparer ton tatouage, choisir un pro, et bien cicatriser.
+        </p>
+      </div>
+    </header>
+
+
+    <% if (!tips || tips.length === 0) { %>
+
+      <div class="empty">
+        <h2>Aucun résultat</h2>
+        <p class="muted">
+          Aucun conseil disponible pour le moment.
+        </p>
+
+        <a class="btnGhost" href="/conseils">
+          Voir tous les conseils
+        </a>
+      </div>
+
+    <% } else { %>
+
+      <section class="tipsGrid">
+
+        <% tips.forEach((t) => { %>
+
+          <article class="tipCard">
+
+            <div class="tipTop">
+
+              <h2><%= t.title %></h2>
+
+              <% if (t.tags && t.tags.length) { %>
+                <div class="tags">
+                  <% t.tags.forEach((tag) => { %>
+                    <span class="tag"><%= tag %></span>
+                  <% }) %>
+                </div>
+              <% } %>
+
             </div>
 
-           
-        </header>
 
-        <% if (tips.length===0) { %>
-            <div class="empty">
-                <h2>Aucun résultat</h2>
-                <p class="muted">Essaie un autre mot-clé (ex : “soins”, “hygiène”, “avant”).</p>
-                <a class="btnGhost" href="/conseils">Voir tous les conseils</a>
-            </div>
+            <% if (t.content && t.content.length) { %>
+
+              <ul class="tipList">
+
+                <% t.content.forEach((line) => { %>
+                  <li><%= line %></li>
+                <% }) %>
+
+              </ul>
+
             <% } %>
 
-                <section class="tipsGrid">
-                    <% tips.forEach((t)=> { %>
-                        <article class="tipCard">
-                            <div class="tipTop">
-                                <h2>
-                                    <%= t.title %>
-                                </h2>
-                                <div class="tags">
-                                    <% t.tags.forEach((tag)=> { %>
-                                        <span class="tag">
-                                            <%= tag %>
-                                        </span>
-                                        <% }) %>
-                                </div>
-                            </div>
+          </article>
 
-                            <ul class="tipList">
-                                <% t.content.forEach((line)=> { %>
-                                    <li>
-                                        <%= line %>
-                                    </li>
-                                    <% }) %>
-                            </ul>
-                        </article>
-                        <% }) %>
-                </section>
+        <% }) %>
 
-                <section class="callout">
-                    <div>
-                        <h2>Tu veux être visible sur l’annuaire ?</h2>
-                        <p class="muted">Crée ta fiche tatoueur et ajoute tes styles, ta ville, ton Instagram et tes
-                            infos de contact.</p>
-                    </div>
-                    <a class="btnPrimary" href="/artists/new">Ajouter un tatoueur</a>
-                </section>
-    </main>
+      </section>
+
+    <% } %>
+
+
+    <section class="callout">
+
+      <div>
+        <h2>Tu veux être visible sur l’annuaire ?</h2>
+
+        <p class="muted">
+          Crée ta fiche tatoueur et ajoute tes styles, ta ville, ton Instagram et tes infos de contact.
+        </p>
+      </div>
+
+      <a class="btnPrimary" href="/artists/apply">
+        Créer ma fiche tatoueur
+      </a>
+
+    </section>
+
+  </main>
 
 </body>
 

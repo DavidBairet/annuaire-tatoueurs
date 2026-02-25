@@ -63,17 +63,8 @@
           </div>
 
           <div class="actions">
-            <% if (a.instagram) { %>
-              <a class="btn btn--primary" href="<%= a.instagram %>" target="_blank" rel="noopener">Instagram</a>
-            <% } %>
-
-            <% const email = a.email || a.contact; %>
-            <% if (email) { %>
-              <a class="btn" href="mailto:<%= email %>">Contacter</a>
-            <% } %>
-
-            <a class="btn btn--ghost" href="/artists/<%= a._id %>">Voir la fiche</a>
-          </div>
+  <a class="btn btn--ghost" href="/artists/<%= a._id %>">Voir la fiche</a>
+</div>
         </article>
       <% }) %>
     </section>

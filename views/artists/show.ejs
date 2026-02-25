@@ -16,78 +16,132 @@
 
     <main class="artistProfile container">
 
-  
+      <section class="artistCard">
 
-  <section class="artistCard">
+        <!-- HEADER -->
+        <header class="artistHeader">
 
-    <!-- HEADER -->
-    <header class="artistHeader">
-
-      <div class="artistAvatar">
-        <% if (artist.avatar) { %>
-          <img src="<%= artist.avatar %>" alt="<%= artist.name %>">
-        <% } else { %>
-          <div class="avatarPlaceholder">
-            <%= artist.name.charAt(0).toUpperCase() %>
+          <div class="artistAvatar">
+            <% if (artist.avatar) { %>
+              <img src="<%= artist.avatar %>" alt="<%= artist.name %>">
+            <% } else { %>
+              <div class="avatarPlaceholder">
+                <%= artist.name.charAt(0).toUpperCase() %>
+              </div>
+            <% } %>
           </div>
-        <% } %>
-      </div>
 
-      <div class="artistInfo">
+          <div class="artistInfo">
 
-        <h1 class="artistName">
-          <%= artist.name %>
-        </h1>
+            <h1 class="artistName"><%= artist.name %></h1>
 
-        <p class="artistCity">
-          📍 <%= artist.city || "Ville non renseignée" %>
-        </p>
+            <p class="artistCity">
+              📍
+              <%= artist.postalCode ? artist.postalCode : "" %>
+              <%= artist.city || "Ville non renseignée" %>
+              <% if (artist.department) { %>
+                <span class="artistDept">(<%= artist.department %>)</span>
+              <% } %>
+            </p>
 
-        <% if (artist.styles && artist.styles.length) { %>
-          <div class="artistStyles">
-            <% artist.styles.forEach(style => { %>
-              <span class="styleTag"><%= style %></span>
-            <% }) %>
+            <% if (artist.styles && artist.styles.length) { %>
+              <div class="artistStyles">
+                <% artist.styles.forEach(style => { %>
+                  <span class="styleTag"><%= style %></span>
+                <% }) %>
+              </div>
+            <% } %>
+
+            <div class="artistLinks">
+              <% if (artist.instagram) { %>
+                <a href="<%= artist.instagram %>" target="_blank" class="btnInstagram">
+                  Instagram
+                </a>
+              <% } %>
+
+              <% if (artist.facebook) { %>
+                <a href="<%= artist.facebook %>" target="_blank" class="btnLink">
+                  Facebook
+                </a>
+              <% } %>
+
+              <% if (artist.website) { %>
+                <a href="<%= artist.website %>" target="_blank" class="btnLink">
+                  Site web
+                </a>
+              <% } %>
+            </div>
+
           </div>
-        <% } %>
 
-        <% if (artist.instagram) { %>
-          <a href="<%= artist.instagram %>" target="_blank" class="btnInstagram">
-            Voir Instagram
-          </a>
-        <% } %>
-
-      </div>
-
-    </header>
+        </header>
 
 
-    <!-- BIO -->
-    <section class="artistBio">
-
-      <h2>À propos</h2>
-
-      <p>
-        <%= artist.bio || "Ce tatoueur n'a pas encore ajouté de description." %>
-      </p>
-
-    </section>
+        <!-- BIO -->
+        <section class="artistBio">
+          <h2>À propos</h2>
+          <p><%= artist.bio || "Ce tatoueur n'a pas encore ajouté de description." %></p>
+        </section>
 
 
-    <!-- META -->
-    <footer class="artistMeta">
+        <!-- INFOS PRATIQUES -->
+        <section class="artistDetails">
 
-      <span>
-        Inscrit le :
-        <%= new Date(artist.createdAt).toLocaleDateString("fr-FR") %>
-      </span>
+          <h2>Infos pratiques</h2>
 
-   
+          <div class="detailGrid">
 
-  </section>
+            <!-- ADRESSE -->
+            <div class="detailItem">
+              <h3>Adresse</h3>
+              <% if (artist.address1 || artist.address2 || artist.city) { %>
+                <p>
+                  <% if (artist.address1) { %><%= artist.address1 %><br><% } %>
+                  <% if (artist.address2) { %><%= artist.address2 %><br><% } %>
+                  <%= artist.postalCode ? artist.postalCode : "" %>
+                  <%= artist.city ? artist.city : "" %>
+                </p>
+              <% } else { %>
+                <p class="muted">Adresse non renseignée</p>
+              <% } %>
+            </div>
 
-</main>
+            <!-- TELEPHONE -->
+            <div class="detailItem">
+              <h3>Téléphone</h3>
+              <% if (artist.phone) { %>
+                <p><a href="tel:<%= artist.phone %>"><%= artist.phone %></a></p>
+              <% } else { %>
+                <p class="muted">Téléphone non renseigné</p>
+              <% } %>
+            </div>
 
+            <!-- EMAIL -->
+            <div class="detailItem">
+              <h3>Email</h3>
+              <% if (artist.email) { %>
+                <p><a href="mailto:<%= artist.email %>"><%= artist.email %></a></p>
+              <% } else { %>
+                <p class="muted">Email non renseigné</p>
+              <% } %>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- META -->
+        <footer class="artistMeta">
+          <span>
+            Inscrit le :
+            <%= new Date(artist.createdAt).toLocaleDateString("fr-FR") %>
+          </span>
+        </footer>
+
+      </section>
+
+    </main>
 
     <%- include("../partials/footer") %>
   </body>
