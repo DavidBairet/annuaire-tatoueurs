@@ -4,19 +4,41 @@
 *{ box-sizing:border-box; }
 html,body{ margin:0; padding:0; }
 
+/* =========================
+   THEME
+   ========================= */
 :root{
   --accent:#e352c6;
-  --border: rgba(227,82,198,0.28);
-  --muted: rgba(242,240,255,0.75);
-  --card: rgba(20,20,30,0.72);
-  --font: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  /* bordures + textes */
+  --border: rgba(227,82,198,0.32);
+  --muted: rgba(242,240,255,0.72);
+  --text: rgba(242,240,255,0.92);
+
+  /* surfaces (plus claires) */
+  --card: rgba(42, 42, 62, 0.72);
+  --panel: rgba(28, 28, 44, 0.55);
+
+  /* ombres plus soft */
+  --shadow: 0 14px 40px rgba(0,0,0,0.35);
+
+  /* Fonts */
+  --font-title: 'Pirata One', cursive;
+  --font-body: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
 
 body{
-  font-family: var(--font);
-  background:#0f0f16;
-  color:#f2f0ff;
+  font-family: var(--font-body);
+  color: var(--text);
+
+  background:
+    radial-gradient(900px 520px at 20% 0%, rgba(227,82,198,0.10), transparent 60%),
+    radial-gradient(900px 520px at 80% 10%, rgba(120,70,255,0.08), transparent 60%),
+    #0f0f16;
 }
+
+/* Helpers */
+.muted{ opacity: 1; color: var(--muted); }
 
 /* =========================
    CONTAINER
@@ -63,13 +85,14 @@ body{
 }
 
 .logo__text{
-  font-size:18px;
-  font-weight:900;
-  letter-spacing:0.6px;
-  color:#f2f0ff;
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 1.2px;
+  color: #f2f0ff;
 }
 
-/* Hover logo (sur les pages où ça a du sens) */
+/* Hover logo */
 .logo:hover .logo__text{
   color: var(--accent);
 }
@@ -91,17 +114,29 @@ body{
 
 .menu a:hover{ color:#fff; }
 
-.menu__cta{
+/* (OPTIONNEL) Menu CTA : met en avant "Inscription artiste" */
+.menu a[href="/artists/apply"]{
   padding: 10px 14px;
   border-radius: 14px;
-  border: 1px solid var(--border);
-  color:#f2f0ff !important;
-  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(227,82,198,0.35);
+  background: rgba(227,82,198,0.10);
+  color: #ffffff;
 }
 
-.menu__cta:hover{
-  border-color: rgba(227,82,198,0.65);
-  color: var(--accent) !important;
+.menu a[href="/artists/apply"]:hover{
+  border-color: rgba(227,82,198,0.75);
+  background: rgba(227,82,198,0.16);
+  color: var(--accent);
+}
+
+/* =========================
+   TYPO TATTOO (TITRES)
+   ========================= */
+h1, h2, h3,
+.pageTitle,
+.ctaPremium__title{
+  font-family: var(--font-title);
+  letter-spacing: 1.2px;
 }
 
 /* =========================
@@ -113,17 +148,17 @@ body{
   align-items:center;
   padding: 52px 0;
   background:
-    linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(247, 242, 242, 0.137)),
+    linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(247,242,242,0.137)),
     url("/images/hero.jpg") center/cover no-repeat;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
 .hero__inner{
   background: rgba(10,10,15,0.35);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
   border-radius: 22px;
   padding: 26px;
-  box-shadow: 0 14px 40px rgba(0,0,0,0.55);
+  box-shadow: var(--shadow);
   max-width: 720px;
 }
 
@@ -131,7 +166,14 @@ body{
   margin: 0 0 10px;
   font-size: clamp(32px, 4vw, 54px);
   line-height: 1.05;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.55);
+
+  letter-spacing: 2px;
+  text-transform: uppercase;
+
+  text-shadow:
+    0 0 10px rgba(227,82,198,0.55),
+    0 0 22px rgba(227,82,198,0.25),
+    0 4px 20px rgba(0,0,0,0.45);
 }
 
 .hero p{
@@ -157,9 +199,9 @@ body{
   border-radius: 14px;
   text-decoration:none;
   font-weight: 800;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.14);
   color:#f2f0ff;
-  background: rgba(0,0,0,0.25);
+  background: rgba(28,28,44,0.35);
 }
 
 .btn:hover{
@@ -167,7 +209,7 @@ body{
 }
 
 .btn--primary{
-  border-color: rgba(227,82,198,0.5);
+  border-color: rgba(227,82,198,0.50);
   background: rgba(227,82,198,0.14);
 }
 
@@ -177,7 +219,7 @@ body{
 }
 
 .btn--ghost{
-  background: rgba(0,0,0,0.18);
+  background: rgba(28,28,44,0.28);
 }
 
 /* =========================
@@ -205,7 +247,7 @@ body{
 .footer{
   padding: 22px 0;
   border-top: 1px solid rgba(255,255,255,0.08);
-  color: rgba(242,240,255,0.6);
+  color: rgba(242,240,255,0.68);
 }
 
 /* =========================
@@ -222,24 +264,25 @@ body{
   flex: 1 1 320px;
   padding: 12px 14px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.514);
-  background: rgba(0,0,0,0.25);
-  color: #f2f0ff;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--panel);
+  color: var(--text);
   outline: none;
 }
 
 .search__input::placeholder{
-  color: rgba(242,240,255,0.65);
+  color: rgba(242,240,255,0.62);
 }
 
 .search__input:focus{
-  border-color: rgba(227,82,198,0.7);
+  border-color: rgba(227,82,198,0.55);
+  box-shadow: 0 0 0 4px rgba(227,82,198,0.14);
 }
 
 .search__btn{
   padding: 12px 16px;
   border-radius: 14px;
-  border: 1px solid rgba(227,82,198,0.5);
+  border: 1px solid rgba(227,82,198,0.50);
   background: rgba(227,82,198,0.14);
   color: #f2f0ff;
   font-weight: 800;
@@ -272,8 +315,6 @@ body{
   color: var(--muted);
 }
 
-.muted{ opacity: .50; }
-
 /* =========================
    CARDS LIST
    ========================= */
@@ -286,11 +327,15 @@ body{
 
 .cardArtist{
   grid-column: span 6;
-  background: linear-gradient(180deg, rgba(18,18,26,0.85), rgba(26,26,40,0.90));
-  border: 1px solid rgba(227,82,198,0.18);
-  border-radius: 18px;
   padding: 18px;
-  box-shadow: 0 14px 40px rgba(0,0,0,0.55);
+  border-radius: 18px;
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    var(--card);
+
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: var(--shadow);
 }
 
 .cardArtist__top{
@@ -307,7 +352,7 @@ body{
 
 .cardArtist__meta{
   margin: 0;
-  color: rgba(242,240,255,0.70);
+  color: rgba(242,240,255,0.74);
   font-size: 13px;
   display:flex;
   align-items:center;
@@ -318,7 +363,7 @@ body{
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(227,82,198,0.9);
+  background: rgba(227,82,198,0.90);
   display:inline-block;
 }
 
@@ -329,9 +374,7 @@ body{
   margin-top: 12px;
 }
 
-.search--page{
-  margin: 0;
-}
+.search--page{ margin: 0; }
 
 /* =========================
    RESPONSIVE
@@ -359,7 +402,7 @@ body.page--artist .logo__img{
   height: 56px;
 }
 
-/* HOME : désactive l'effet hover sur le logo (IMPORTANT) */
+/* HOME : désactive hover sur le logo */
 body.page--home .logo:hover .logo__text,
 body.page--home .logo:focus .logo__text,
 body.page--home .logo:focus-visible .logo__text{
@@ -371,6 +414,7 @@ body.page--home .logo,
 body.page--home .logo *{
   cursor: default;
 }
+
 /* =========================
    CTA PREMIUM (HOME)
    ========================= */
@@ -382,14 +426,12 @@ body.page--home .logo *{
   padding: 28px;
   border-radius: 22px;
 
-  background: linear-gradient(
-    180deg,
-    rgba(18,18,26,0.88),
-    rgba(26,26,40,0.92)
-  );
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    var(--card);
 
   border: 1px solid rgba(227,82,198,0.28);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
 }
 
@@ -419,9 +461,8 @@ body.page--home .logo *{
   grid-column: span 6;
   padding: 10px 12px;
   border-radius: 14px;
-
-  background: rgba(227,82,198,0.08);
-  border: 1px solid rgba(227,82,198,0.18);
+  background: rgba(227,82,198,0.10);
+  border: 1px solid rgba(227,82,198,0.20);
   color: rgba(242,240,255,0.92);
   font-weight: 650;
   font-size: 14px;
@@ -433,33 +474,94 @@ body.page--home .logo *{
   flex-wrap: wrap;
 }
 
-/* Responsive */
+/* Responsive CTA */
 @media (max-width: 780px){
-  .ctaPremium__card{
-    padding: 20px;
-  }
-  .ctaPremium__title{
-    font-size: 22px;
-  }
-  .benefit{
-    grid-column: span 12;
-  }
+  .ctaPremium__card{ padding: 20px; }
+  .ctaPremium__title{ font-size: 22px; }
+  .benefit{ grid-column: span 12; }
 }
 
 /* =========================
-   (OPTIONNEL) Menu CTA
-   - met en avant "Inscription artiste"
+   MOBILE RESPONSIVE PATCH
    ========================= */
-.menu a[href="/artists/apply"]{
-  padding: 10px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(227,82,198,0.35);
-  background: rgba(227,82,198,0.10);
-  color: #ffffff;
+
+/* 1) Topbar : wrap propre */
+@media (max-width: 720px){
+  .topbar__inner{
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 0;
+    gap: 10px;
+  }
+
+  .logo{
+    justify-content: center;
+    width: 100%;
+  }
+
+  .logo__img{ height: 56px; }
+
+  .menu{
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .menu a{
+    font-size: 14px;
+    padding: 8px 10px;
+  }
 }
 
-.menu a[href="/artists/apply"]:hover{
-  border-color: rgba(227,82,198,0.75);
-  background: rgba(227,82,198,0.16);
-  color: var(--accent);
+/* 2) Hero */
+@media (max-width: 720px){
+  .hero{
+    min-height: auto;
+    padding: 26px 0;
+  }
+
+  .hero__inner{
+    max-width: 100%;
+    width: 100%;
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .hero h1{
+    font-size: clamp(24px, 7vw, 34px);
+    letter-spacing: 1.2px;
+  }
+
+  .hero p{
+    font-size: 15px;
+    line-height: 1.55;
+  }
+}
+
+/* 3) Search stack */
+@media (max-width: 520px){
+  .search{
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search__input{ width: 100%; }
+  .search__btn{ width: 100%; }
+
+  .hero__actions{
+    flex-direction: column;
+  }
+
+  .hero__actions .btn{
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* 4) CTA */
+@media (max-width: 520px){
+  .ctaPremium__card{ padding: 18px; }
+  .ctaPremium__title{ font-size: 22px; }
+  .benefit{ grid-column: span 12; }
 }

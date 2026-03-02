@@ -1,8 +1,21 @@
-:root {
-    --accent: #e352c6;
-    --border: rgba(227, 82, 198, 0.28);
-    --muted: rgba(242, 240, 255, 0.75);
-    --card: rgba(20, 20, 30, 0.72);
+:root{
+  --accent:#e352c6;
+  --border: rgba(227, 82, 198, 0.32);
+
+  /* Texte */
+  --text: rgba(242,240,255,0.92);
+  --muted: rgba(242,240,255,0.72);
+
+  /* Surfaces (plus claires) */
+  --card: rgba(38, 38, 56, 0.72);
+  --panel: rgba(28, 28, 44, 0.55);
+
+  /* Ombres plus soft */
+  --shadow: 0 14px 40px rgba(0,0,0,0.35);
+
+  /* Fond “page” (léger dégradé) */
+  --pageTop: rgba(227,82,198,0.08);
+  --pageMid: rgba(15,15,22,1);
 }
 
 .advice {

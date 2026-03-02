@@ -1,4 +1,6 @@
-/* ===== PAGE INSCRIPTION (overrides) ===== */
+/* =========================
+   PAGE INSCRIPTION ARTISTE (CLEAN + PLUS LUMINEUX)
+   ========================= */
 
 body.page--apply .topbar{
   background: transparent;
@@ -12,121 +14,118 @@ body.page--apply .topbar__inner{
   padding: 24px 0 6px;
 }
 
-
-/* Centre la page */
+/* Fond léger pour éclaircir la page */
 body.page--apply .applySection{
   min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 18px;
+
+  background:
+    radial-gradient(900px 520px at 20% 0%, rgba(227,82,198,0.10), transparent 60%),
+    radial-gradient(900px 520px at 80% 10%, rgba(120,70,255,0.08), transparent 60%);
 }
 
-/* Si tu gardes un <div class="container"> autour, ça centre pareil */
+/* Si tu gardes un .container autour */
 body.page--apply .applySection > .container{
   display: flex;
   justify-content: center;
 }
 
 /* Carte formulaire */
-body.page--apply .applyForm{
-  width: min(540px, 100%);
+body.page--apply form.applyForm{
+  width: min(560px, 100%);
   margin: 0;
   padding: 26px;
   border-radius: 18px;
 
-  background: linear-gradient(180deg, rgba(18,18,26,.88), rgba(26,26,40,.96));
-  border: 1px solid rgba(227,82,198,0.22);
-  box-shadow: 0 14px 40px rgba(0,0,0,0.60);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    var(--card);
+
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
 }
 
 /* Titre */
-body.page--apply .applyForm h1{
+body.page--apply form.applyForm h1{
   margin: 0 0 18px;
   font-size: 30px;
 }
 
-/* Labels / champs */
-body.page--apply .applyForm label{
+/* Labels */
+body.page--apply form.applyForm label{
   display: block;
   margin: 14px 0 6px;
   font-size: 13px;
-  color: rgba(242,240,255,0.72);
+  color: var(--muted);
 }
 
-body.page--apply .applyForm input{
+/* Champs */
+body.page--apply form.applyForm input,
+body.page--apply form.applyForm textarea{
   width: 100%;
   display: block;
+  margin-bottom: 14px;
+
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(227,82,198,0.22);
-  background: rgba(10,10,18,0.75);
-  color: #f2f0ff;
+
+  border: 1px solid rgba(255,255,255,0.16);
+  background: var(--panel);
+  color: var(--text);
+
   outline: none;
-}
-
-body.page--apply .applyForm input::placeholder{
-  color: rgba(242,240,255,0.45);
-}
-
-body.page--apply .applyForm input:focus{
-  border-color: rgba(227,82,198,0.75);
-  box-shadow: 0 0 0 3px rgba(227,82,198,0.14);
-}
-
-/* Bouton */
-body.page--apply .applyForm button{
-  width: 100%;
-  display: block;
-  margin-top: 18px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: none;
-  background: #e352c6;
-  color: #fff;
-  font-weight: 800;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-body.page--apply .applyForm button:hover{
-  background: #c93dad;
-}
-
-/* Champs formulaire */
-.applyForm input,
-.applyForm textarea{
-  width: 100%;
-  margin-bottom: 18px;
-
-  padding: 12px 16px;
-  border-radius: 12px;
-
-  background: rgba(0,0,0,0.25);
-  border: 1px solid rgba(227,82,198,0.3);
-
-  color: white;
   font-family: inherit;
   font-size: 14px;
 
-  box-sizing: border-box;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
-/* textarea spécifique */
-.applyForm textarea{
+body.page--apply form.applyForm input::placeholder,
+body.page--apply form.applyForm textarea::placeholder{
+  color: rgba(242,240,255,0.55);
+}
+
+body.page--apply form.applyForm input:focus,
+body.page--apply form.applyForm textarea:focus{
+  border-color: rgba(227,82,198,0.55);
+  box-shadow: 0 0 0 4px rgba(227,82,198,0.14);
+}
+
+/* Textarea */
+body.page--apply form.applyForm textarea{
   min-height: 160px;
-  padding: 20px;
+  padding: 14px;
   resize: vertical;
 }
 
-/* labels */
-.applyForm label{
+/* Bouton */
+body.page--apply form.applyForm button{
+  width: 100%;
   display: block;
-  margin-top: 18px;
-  margin-bottom: 6px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+
+  border: 1px solid rgba(227,82,198,0.40);
+  background: rgba(227,82,198,0.18);
+  color: var(--text);
+
+  font-weight: 800;
+  cursor: pointer;
+  transition: .2s ease;
 }
 
-.hp {
+body.page--apply form.applyForm button:hover{
+  border-color: rgba(227,82,198,0.70);
+  filter: brightness(1.06);
+}
+
+/* Honeypot */
+body.page--apply .hp{
   position: absolute;
   left: -9999px;
   top: auto;
