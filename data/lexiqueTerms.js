@@ -1,7 +1,4 @@
 const lexiqueTerms = [
-  // =========================
-  // TATOUAGE
-  // =========================
   {
     term: "Flash",
     domain: "Tatouage",
@@ -121,11 +118,7 @@ const lexiqueTerms = [
     domain: "Tatouage",
     category: "Concept",
     definition: "Zone du corps où le tatouage est réalisé.",
-  },
-
-  // =========================
-  // PIERCING
-  // =========================
+  }, 
   {
     term: "Lobe",
     domain: "Piercing",

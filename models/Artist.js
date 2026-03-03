@@ -19,7 +19,7 @@ const artistSchema = new mongoose.Schema(
       index: true,
     },
 
-    // ✅ Adresse complète
+    
     address1: {
       type: String,
       trim: true,
@@ -94,7 +94,7 @@ const artistSchema = new mongoose.Schema(
       maxlength: 1200,
     },
 
-    // Auth
+    
     email: {
       type: String,
       trim: true,
@@ -151,7 +151,7 @@ const artistSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// génération searchText
+
 artistSchema.pre("save", function () {
   const full = [
     this.name,

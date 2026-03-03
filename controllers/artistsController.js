@@ -1,6 +1,6 @@
 const Artist = require("../models/Artist");
 
-// GET /artists?q=
+
 exports.index = async (req, res) => {
   const q = (req.query.q || "").trim();
 
@@ -24,12 +24,12 @@ exports.index = async (req, res) => {
   });
 };
 
-// GET /artists/new
+
 exports.newForm = (req, res) => {
   res.render("artists/create", { title: "Inscription artiste" });
 };
 
-// POST /artists
+
 exports.create = async (req, res) => {
   try {
     const { name, city, styles, instagram, contact } = req.body;
@@ -45,7 +45,7 @@ exports.create = async (req, res) => {
       contact: (contact || "").trim(),
     });
 
-    // redirection vers la page profil
+    
     res.redirect(`/artists/${artist._id}`);
   } catch (err) {
     console.error(err);
@@ -53,7 +53,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// GET /artists/:id
+
 exports.show = async (req, res) => {
   try {
     const artist = await Artist.findById(req.params.id);

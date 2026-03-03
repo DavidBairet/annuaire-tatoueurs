@@ -1,4 +1,3 @@
-// /data/adviceTips.js
 const adviceTips = [
   {
     title: "Bien préparer sa séance de tatouage",
