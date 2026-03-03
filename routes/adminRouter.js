@@ -1,4 +1,3 @@
-// routes/adminRouter.js
 const express = require("express");
 const bcrypt = require("bcrypt");
 const csrf = require("csurf");
@@ -14,9 +13,7 @@ function requireAdmin(req, res, next) {
   return res.redirect("/admin/login");
 }
 
-// =========================
-// LOGIN
-// =========================
+
 router.get("/login", csrfProtection, (req, res) => {
   res.render("admin/login", {
     title: "Admin - Login",
@@ -51,9 +48,6 @@ router.post("/login", csrfProtection, async (req, res) => {
   res.redirect("/admin");
 });
 
-// =========================
-// DASHBOARD (liste + recherche)
-// =========================
 router.get("/", requireAdmin, async (req, res) => {
   const q = (req.query.q || "").trim();
   const status = (req.query.status || "pending").trim();
@@ -95,9 +89,6 @@ router.get("/", requireAdmin, async (req, res) => {
   });
 });
 
-// =========================
-// AJOUT MANUEL ARTISTE (ADMIN)
-// =========================
 router.get("/artists/new", requireAdmin, (req, res) => {
   res.render("admin/artists_new", { title: "Ajouter un artiste" });
 });
@@ -148,10 +139,10 @@ router.post("/artists", requireAdmin, async (req, res) => {
       instagram,
       facebook,
       website,
-      email,               // null si vide
+      email,               
       bio,
-      status: "approved",  // ✅ visible direct
-      emailVerified: true, // ✅ ok (ajout admin)
+      status: "approved",  
+      emailVerified: true, 
       source: "admin",
     });
 
@@ -163,9 +154,6 @@ router.post("/artists", requireAdmin, async (req, res) => {
   }
 });
 
-// =========================
-// ACTIONS (approve/reject/pending/delete)
-// =========================
 router.post("/artists/:id/approve", requireAdmin, async (req, res) => {
   await Artist.findByIdAndUpdate(req.params.id, { status: "approved" });
   res.redirect("/admin");
@@ -186,9 +174,6 @@ router.post("/artists/:id/delete", requireAdmin, async (req, res) => {
   res.redirect("/admin");
 });
 
-// =========================
-// LOGOUT
-// =========================
 router.post("/logout", requireAdmin, (req, res) => {
   req.session.destroy(() => res.redirect("/admin/login"));
 });

@@ -10,8 +10,8 @@ function normalize(s) {
     .trim()
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // supprime les accents
-    .replace(/\s+/g, " "); // espaces propres
+    .replace(/[\u0300-\u036f]/g, "") 
+    .replace(/\s+/g, " "); 
 }
 
 function applyFilter(q) {

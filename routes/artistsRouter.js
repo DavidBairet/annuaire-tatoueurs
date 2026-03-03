@@ -1,14 +1,10 @@
-// routes/artistsRouter.js
 const express = require("express");
 const router = express.Router();
 
 const crypto = require("crypto");
 const Artist = require("../models/Artist");
 const sendVerificationEmail = require("../config/mailer");
-const bcrypt = require("bcrypt");
-// =========================
-// Helpers
-// =========================
+const bcrypt = require("bcrypt")
 function cleanText(v = "") {
   return String(v).trim();
 }
@@ -56,15 +52,11 @@ function normalizeForSearch(s = "") {
     .trim();
 }
 
-// =========================
-// LISTE + RECHERCHE (PUBLIC) => approved uniquement
-// GET /artists?q=...
-// =========================
 router.get("/", async (req, res) => {
   try {
     const q = cleanText(req.query.q || "");
 
-    // ✅ pagination (si recherche -> page 1)
+  
     const pageParam = parseInt(req.query.page || "1", 10);
     const page = q ? 1 : Math.max(Number.isFinite(pageParam) ? pageParam : 1, 1);
 
@@ -73,8 +65,7 @@ router.get("/", async (req, res) => {
 
     const filter = { status: "approved" };
 
-    if (q) {
-      // ===== 1) Google Maps via searchText (AND tokens) =====
+    if (q) {     
       const qNorm = normalizeForSearch(q);
       const tokens = qNorm.split(" ").filter(Boolean).slice(0, 8);
 
@@ -82,7 +73,7 @@ router.get("/", async (req, res) => {
         searchText: { $regex: escapeRegex(t), $options: "i" },
       }));
 
-      // ===== 2) Fallback (ancienne recherche) =====
+     
       const qEsc = escapeRegex(q);
       const rxContains = new RegExp(qEsc, "i");
       const rxPrefix = new RegExp("^" + qEsc, "i");
@@ -95,14 +86,14 @@ router.get("/", async (req, res) => {
         { department: rxPrefix },
       ];
 
-      // CP complet => dept
+      
       if (/^\d{5}$/.test(q)) {
         const dept = deptFromPostal(q);
         const deptEsc = escapeRegex(dept);
         fallbackOr.push({ department: new RegExp("^" + deptEsc, "i") });
       }
 
-      // ✅ On accepte : (searchText AND tokens) OU (fallback OR)
+      
       filter.$or = [{ $and: andSearchText }, { $or: fallbackOr }];
     }
 
@@ -128,16 +119,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-// =========================
-// PAGE CANDIDATURE (PUBLIC)
-// =========================
 router.get("/apply", (req, res) => {
   res.render("artists/apply", { title: "Inscription artiste" });
 });
 
-// =========================
-// ENVOI CANDIDATURE (PUBLIC) => pending + email verification
-// =========================
 router.post("/apply", async (req, res) => {
   try {
     if (req.body.honeypot && String(req.body.honeypot).trim() !== "") {
@@ -225,11 +210,6 @@ res.render("artists/apply_success", {
   }
 });
 
-// =========================
-// VERIFICATION EMAIL (PUBLIC)
-// ⚠️ Must be BEFORE /:id
-// GET /artists/verify/:token
-// =========================
 router.get("/verify/:token", async (req, res) => {
   try {
     const { token } = req.params;
@@ -260,10 +240,6 @@ router.get("/verify/:token", async (req, res) => {
   }
 });
 
-// =========================
-// FICHE ARTISTE (PUBLIC) => approved uniquement
-// GET /artists/:id
-// =========================
 router.get("/:id", async (req, res) => {
   try {
     const artist = await Artist.findOne({ _id: req.params.id, status: "approved" });

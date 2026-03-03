@@ -1,7 +1,3 @@
-/* =========================
-   PAGE INSCRIPTION ARTISTE (CLEAN + PLUS LUMINEUX)
-   ========================= */
-
 body.page--apply .topbar{
   background: transparent;
   border-bottom: none;
@@ -14,7 +10,7 @@ body.page--apply .topbar__inner{
   padding: 24px 0 6px;
 }
 
-/* Fond léger pour éclaircir la page */
+
 body.page--apply .applySection{
   min-height: calc(100vh - 130px);
   display: flex;
@@ -27,13 +23,13 @@ body.page--apply .applySection{
     radial-gradient(900px 520px at 80% 10%, rgba(120,70,255,0.08), transparent 60%);
 }
 
-/* Si tu gardes un .container autour */
+
 body.page--apply .applySection > .container{
   display: flex;
   justify-content: center;
 }
 
-/* Carte formulaire */
+
 body.page--apply form.applyForm{
   width: min(560px, 100%);
   margin: 0;
@@ -49,13 +45,13 @@ body.page--apply form.applyForm{
   backdrop-filter: blur(10px);
 }
 
-/* Titre */
+
 body.page--apply form.applyForm h1{
   margin: 0 0 18px;
   font-size: 30px;
 }
 
-/* Labels */
+
 body.page--apply form.applyForm label{
   display: block;
   margin: 14px 0 6px;
@@ -63,7 +59,7 @@ body.page--apply form.applyForm label{
   color: var(--muted);
 }
 
-/* Champs */
+
 body.page--apply form.applyForm input,
 body.page--apply form.applyForm textarea{
   width: 100%;
@@ -95,14 +91,14 @@ body.page--apply form.applyForm textarea:focus{
   box-shadow: 0 0 0 4px rgba(227,82,198,0.14);
 }
 
-/* Textarea */
+
 body.page--apply form.applyForm textarea{
   min-height: 160px;
   padding: 14px;
   resize: vertical;
 }
 
-/* Bouton */
+
 body.page--apply form.applyForm button{
   width: 100%;
   display: block;
@@ -124,7 +120,7 @@ body.page--apply form.applyForm button:hover{
   filter: brightness(1.06);
 }
 
-/* Honeypot */
+
 body.page--apply .hp{
   position: absolute;
   left: -9999px;
