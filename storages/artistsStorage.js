@@ -3,7 +3,7 @@ class ArtistsStorage {
         this.storage = {};
         this.id = 0;
 
-        // petit seed (tu peux enlever)
+        
         this.addArtist({
             name: "Sand Ancre",
             city: "Paris",
