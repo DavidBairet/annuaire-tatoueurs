@@ -500,3 +500,37 @@ body.page--home .logo *{
   .ctaPremium__title{ font-size: 22px; }
   .benefit{ grid-column: span 12; }
 }
+/* bouton retour en haut */
+#scrollTopBtn{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  width: 45px;
+  height: 45px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(20,20,30,0.8);
+  color: #f2f0ff;
+
+  font-size: 20px;
+  cursor: pointer;
+
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+#scrollTopBtn.show{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#scrollTopBtn:hover{
+  transform: translateY(-3px);
+}
