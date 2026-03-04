@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+
 const Artist = require("../models/Artist");
 const sendVerificationEmail = require("../config/mailer");
-const bcrypt = require("bcrypt")
+
 function cleanText(v = "") {
   return String(v).trim();
 }
@@ -55,17 +57,13 @@ function normalizeForSearch(s = "") {
 router.get("/", async (req, res) => {
   try {
     const q = cleanText(req.query.q || "");
-
-  
     const pageParam = parseInt(req.query.page || "1", 10);
     const page = q ? 1 : Math.max(Number.isFinite(pageParam) ? pageParam : 1, 1);
-
     const limit = 12;
     const skip = (page - 1) * limit;
-
     const filter = { status: "approved" };
 
-    if (q) {     
+    if (q) {
       const qNorm = normalizeForSearch(q);
       const tokens = qNorm.split(" ").filter(Boolean).slice(0, 8);
 
@@ -73,7 +71,6 @@ router.get("/", async (req, res) => {
         searchText: { $regex: escapeRegex(t), $options: "i" },
       }));
 
-     
       const qEsc = escapeRegex(q);
       const rxContains = new RegExp(qEsc, "i");
       const rxPrefix = new RegExp("^" + qEsc, "i");
@@ -86,14 +83,12 @@ router.get("/", async (req, res) => {
         { department: rxPrefix },
       ];
 
-      
       if (/^\d{5}$/.test(q)) {
         const dept = deptFromPostal(q);
         const deptEsc = escapeRegex(dept);
         fallbackOr.push({ department: new RegExp("^" + deptEsc, "i") });
       }
 
-      
       filter.$or = [{ $and: andSearchText }, { $or: fallbackOr }];
     }
 
@@ -123,6 +118,51 @@ router.get("/apply", (req, res) => {
   res.render("artists/apply", { title: "Inscription artiste" });
 });
 
+router.get("/deja-inscrit", (req, res) => {
+  res.render("artists/deja_inscrit", { title: "Déjà inscrit ?" });
+});
+
+router.get("/login", (req, res) => {
+  res.render("artists/login", { title: "Connexion artiste", error: null });
+});
+
+router.post("/login", async (req, res) => {
+  try {
+    const email = cleanText(req.body.email).toLowerCase();
+    const password = String(req.body.password || "");
+
+    const artist = await Artist.findOne({ email });
+
+    if (!artist) {
+      return res.status(401).render("artists/login", {
+        title: "Connexion artiste",
+        error: "Email ou mot de passe incorrect",
+      });
+    }
+
+    const ok = await bcrypt.compare(password, artist.passwordHash);
+
+    if (!ok) {
+      return res.status(401).render("artists/login", {
+        title: "Connexion artiste",
+        error: "Email ou mot de passe incorrect",
+      });
+    }
+
+    req.session.artistId = artist._id;
+
+    res.redirect("/artists/me");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erreur serveur");
+  }
+});
+
+router.post("/logout", (req, res) => {
+  req.session.artistId = null;
+  res.redirect("/");
+});
+
 router.post("/apply", async (req, res) => {
   try {
     if (req.body.honeypot && String(req.body.honeypot).trim() !== "") {
@@ -149,23 +189,32 @@ router.post("/apply", async (req, res) => {
 
     const bio = cleanText(req.body.bio);
 
-    // validations
-    if (name.length < 2 || name.length > 50) return res.status(400).send("Nom requis (2-50).");
-    if (city.length < 2 || city.length > 50) return res.status(400).send("Ville requise (2-50).");
-    if (!/^\d{5}$/.test(postalCode)) return res.status(400).send("Code postal invalide (5 chiffres).");
-    if (!email || email.length < 5 || email.length > 120) return res.status(400).send("Email requis.");
+    if (name.length < 2 || name.length > 50) return res.status(400).send("Nom requis");
+    if (city.length < 2 || city.length > 50) return res.status(400).send("Ville requise");
+    if (!/^\d{5}$/.test(postalCode)) return res.status(400).send("Code postal invalide");
 
-    if (!confirmEmail) return res.status(400).send("Confirmation email requise.");
+    if (!email || email.length < 5 || email.length > 120) return res.status(400).send("Email requis");
+    if (!confirmEmail) return res.status(400).send("Confirmation email requise");
     if (email.toLowerCase() !== confirmEmail.toLowerCase()) {
-      return res.status(400).send("Les emails ne correspondent pas.");
+      return res.status(400).send("Les emails ne correspondent pas");
     }
 
     if (password.length < 8 || password.length > 72) {
-      return res.status(400).send("Mot de passe requis (8 à 72 caractères).");
+      return res.status(400).send("Mot de passe requis");
     }
-    if (!confirmPassword) return res.status(400).send("Confirmation mot de passe requise.");
+
+    if (!confirmPassword) return res.status(400).send("Confirmation mot de passe requise");
+
     if (password !== confirmPassword) {
-      return res.status(400).send("Les mots de passe ne correspondent pas.");
+      return res.status(400).send("Les mots de passe ne correspondent pas");
+    }
+
+    const emailLower = email.toLowerCase();
+
+    const exists = await Artist.findOne({ email: emailLower });
+
+    if (exists) {
+      return res.redirect("/artists/deja-inscrit");
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -180,7 +229,7 @@ router.post("/apply", async (req, res) => {
       instagram,
       facebook,
       website,
-      email,
+      email: emailLower,
       bio,
       status: "pending",
       emailVerified: false,
@@ -188,6 +237,7 @@ router.post("/apply", async (req, res) => {
     });
 
     const token = crypto.randomBytes(32).toString("hex");
+
     artist.verifyToken = token;
     artist.verifyTokenExpires = new Date(Date.now() + 1000 * 60 * 60 * 24);
 
@@ -195,17 +245,19 @@ router.post("/apply", async (req, res) => {
 
     await sendVerificationEmail(artist.email, token);
 
-   const verifyUrl =
-  (process.env.BASE_URL || "http://localhost:3000") + `/artists/verify/${token}`;
+    const verifyUrl =
+      (process.env.BASE_URL || "http://localhost:3000") + `/artists/verify/${token}`;
 
-res.render("artists/apply_success", {
-  title: "Demande envoyée",
-  email,
-  verifyUrl: process.env.MAIL_MODE === "console" ? verifyUrl : null,
-});
+    res.render("artists/apply_success", {
+      title: "Demande envoyée",
+      email: artist.email,
+      verifyUrl: process.env.MAIL_MODE === "console" ? verifyUrl : null,
+    });
   } catch (error) {
-    console.error("❌ /artists/apply error:", error);
-    if (error.code === 11000) return res.status(400).send("Cet email est déjà utilisé.");
+    console.error(error);
+
+    if (error.code === 11000) return res.redirect("/artists/deja-inscrit");
+
     res.status(500).send("Erreur lors de l'envoi de la demande");
   }
 });
@@ -228,21 +280,25 @@ router.get("/verify/:token", async (req, res) => {
     artist.emailVerified = true;
     artist.verifyToken = null;
     artist.verifyTokenExpires = null;
+
     await artist.save();
 
-    return res.render("artists/verify_success", {
+    res.render("artists/verify_success", {
       title: "Email vérifié",
       artistName: artist.name,
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).send("Erreur serveur.");
+    res.status(500).send("Erreur serveur");
   }
 });
 
 router.get("/:id", async (req, res) => {
   try {
-    const artist = await Artist.findOne({ _id: req.params.id, status: "approved" });
+    const artist = await Artist.findOne({
+      _id: req.params.id,
+      status: "approved",
+    });
 
     if (!artist) {
       return res.status(404).render("404", { title: "Artiste introuvable" });

@@ -129,3 +129,62 @@ body.page--apply .hp{
   height: 1px;
   overflow: hidden;
 }
+.alreadyBox{
+  margin: 10px 0 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(20,20,30,0.55);
+  border: 1px solid var(--border);
+}
+
+.alreadyBox__text{
+  margin: 0;
+  color: rgba(242,240,255,0.85);
+  font-size: 0.95rem;
+}
+
+.alreadyBox__link{
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.alreadyBox__link:hover{
+  text-decoration: underline;
+}
+.infoCard{
+  width: min(540px, 100%);
+  margin: 0 auto;
+  padding: 26px;
+  border-radius: 18px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20,20,30,0.78),
+    rgba(20,20,30,0.62)
+  );
+
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+}
+
+.infoCard__title{
+  margin: 0 0 10px;
+}
+
+.infoCard__text{
+  margin: 0 0 16px;
+  color: rgba(242,240,255,0.85);
+}
+
+.infoCard__actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.infoCard__hint{
+  margin-top:14px;
+  color: rgba(242,240,255,0.72);
+  font-size:.95rem;
+}

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/inscription.css">
+</head>
+
+<body class="page--apply">
+  <header class="topbar topbar--minimal">
+    <div class="container topbar__inner">
+      <a class="logo logo--center" href="/">
+        <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+        <span class="logo__text">Retour à l'Annuaire</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="applySection">
+    <div class="container">
+      <section class="infoCard">
+        <h1 class="infoCard__title">Déjà inscrit ?</h1>
+
+        <p class="infoCard__text">
+          Si tu as déjà créé ton profil, connecte-toi pour le modifier.
+        </p>
+
+        <div class="infoCard__actions">
+          <a class="btnPrimary" href="/artists/login">Se connecter</a>
+          <a class="btnGhost" href="/artists/apply">Nouvelle inscription</a>
+        </div>
+
+        <p class="infoCard__hint">
+          Si tu as un doute : regarde dans tes mails, tu as aussi un email de vérification.
+        </p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

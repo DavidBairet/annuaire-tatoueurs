@@ -23,8 +23,14 @@
     <div class="container">
       <form class="applyForm" method="POST" action="/artists/apply" autocomplete="on">
         <h1>Inscription artiste</h1>
-
-        <!-- honeypot anti-bot -->
+        <div class="alreadyBox">
+        <p class="alreadyBox__text">
+                 Déjà inscrit ?
+        <a class="alreadyBox__link" href="/artists/deja-inscrit">Clique ici</a>
+          pour te connecter et modifier ton profil.
+        </p>
+      </div>
+       
         <div class="hp" aria-hidden="true">
           <input type="text" name="honeypot" tabindex="-1" autocomplete="off">
         </div>
@@ -67,14 +73,14 @@
         <label>Site internet (facultatif)</label>
         <input name="website" type="url" placeholder="https://...">
 
-        <!-- ✅ Email + confirmation -->
+        
         <label>Email de contact</label>
         <input name="email" type="email" required autocomplete="email" maxlength="120">
 
         <label>Confirmer l'email</label>
         <input name="confirmEmail" type="email" required autocomplete="email" maxlength="120">
 
-        <!-- ✅ Mot de passe + confirmation -->
+        
         <label>Mot de passe</label>
         <input
           name="password"

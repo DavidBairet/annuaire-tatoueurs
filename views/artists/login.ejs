@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= title %></title>
+
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/inscription.css">
+</head>
+
+<body class="page--apply">
+
+<header class="topbar topbar--minimal">
+<div class="container topbar__inner">
+<a class="logo logo--center" href="/">
+<img src="/images/logo.png" class="logo__img">
+<span class="logo__text">Retour à l'Annuaire</span>
+</a>
+</div>
+</header>
+
+<main class="applySection">
+
+<div class="container">
+
+<form class="applyForm" method="POST" action="/artists/login">
+
+<h1>Connexion artiste</h1>
+
+<% if (error) { %>
+<p class="formError"><%= error %></p>
+<% } %>
+
+<label>Email</label>
+<input name="email" type="email" required>
+
+<label>Mot de passe</label>
+<input name="password" type="password" required>
+
+<button type="submit">
+Se connecter
+</button>
+
+</form>
+
+</div>
+
+</main>
+
+</body>
+</html>
