@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar__inner">
+    <a class="logo" href="/artists/me">
+      <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+      <span class="logo__text">Retour à mon espace</span>
+    </a>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <h1 class="pageTitle">Supprimer mon compte</h1>
+    <p class="pageSub">
+      Cette action est <strong>définitive</strong>. Ta fiche sera supprimée de l’annuaire.
+    </p>
+
+    <% if (error) { %>
+      <div class="card" style="border:1px solid rgba(255,80,80,.35); margin-top:14px;">
+        <strong style="display:block; margin-bottom:6px;">Erreur</strong>
+        <div><%= error %></div>
+      </div>
+    <% } %>
+
+    <form class="card" style="margin-top:16px;" action="/artists/me/delete" method="POST">
+      <p><strong>Compte :</strong> <%= artist.email %></p>
+
+      <label style="display:block; margin-top:12px;">
+        <div style="margin-bottom:6px; opacity:.85;">Mot de passe</div>
+        <input class="input" type="password" name="password" required />
+      </label>
+
+      <label style="display:block; margin-top:12px;">
+        <div style="margin-bottom:6px; opacity:.85;">Tape <strong>SUPPRIMER</strong> pour confirmer</div>
+        <input class="input" type="text" name="confirm" placeholder="SUPPRIMER" required />
+      </label>
+
+      <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+        <button class="btn" type="submit">Supprimer définitivement</button>
+        <a class="btn btn--ghost" href="/artists/me">Annuler</a>
+      </div>
+    </form>
+  </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar__inner">
+
+    <a class="logo" href="/">
+      <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+      <span class="logo__text">Retour à l'Annuaire</span>
+    </a>
+
+    <div style="margin-left:auto; display:flex; gap:10px; align-items:center;">
+      <span style="opacity:.8; font-size:.9rem;"><%= artist.email %></span>
+
+      <form action="/artists/logout" method="POST" style="margin:0;">
+        <button class="btn btn--ghost" type="submit">Déconnexion</button>
+      </form>
+    </div>
+
+  </div>
+</header>
+
+<main class="section">
+
+  <div class="container">
+
+    <h1 class="pageTitle">Espace artiste</h1>
+    <p class="pageSub">
+      Bienvenue <strong><%= artist.name || "Artiste" %></strong>
+    </p>
+
+    <div class="card" style="margin-top:16px;">
+
+      <h2 style="margin-top:0;">Ma fiche</h2>
+
+      <p><strong>Email :</strong> <%= artist.email %></p>
+
+      <p><strong>Ville :</strong> <%= artist.city || "-" %></p>
+
+      <p><strong>Département :</strong> <%= artist.department || "-" %></p>
+
+      <p>
+        <strong>Styles :</strong>
+        <%= (artist.styles && artist.styles.length) ? artist.styles.join(", ") : "-" %>
+      </p>
+
+      <p>
+        <strong>Instagram :</strong>
+        <% if (artist.instagram) { %>
+          <a href="<%= artist.instagram %>" target="_blank" rel="noreferrer">
+            <%= artist.instagram %>
+          </a>
+        <% } else { %>
+          -
+        <% } %>
+      </p>
+
+      <p>
+        <strong>Bio :</strong><br>
+        <%= artist.bio || "—" %>
+      </p>
+
+      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="/artists/me/edit">Modifier ma fiche</a>
+        <a class="btn btn--ghost" href="/artists/me/delete">Supprimer mon compte</a>
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+</body>
+</html>

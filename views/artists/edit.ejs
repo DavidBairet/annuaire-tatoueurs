@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container topbar__inner">
+    <a class="logo" href="/artists/me">
+      <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+      <span class="logo__text">Retour à mon espace</span>
+    </a>
+
+    <div style="margin-left:auto; display:flex; gap:10px; align-items:center;">
+      <span style="opacity:.8; font-size:.9rem;"><%= artist.email %></span>
+      <form action="/artists/logout" method="POST" style="margin:0;">
+        <button class="btn btn--ghost" type="submit">Déconnexion</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <h1 class="pageTitle">Modifier ma fiche</h1>
+    <p class="pageSub">Mets à jour tes infos (c’est ce qui s’affiche sur ta fiche publique).</p>
+
+    <% if (error) { %>
+      <div class="card" style="border:1px solid rgba(255,80,80,.35); margin-top:14px;">
+        <strong style="display:block; margin-bottom:6px;">Erreur</strong>
+        <div><%= error %></div>
+      </div>
+    <% } %>
+
+    <% if (success) { %>
+      <div class="card" style="border:1px solid rgba(80,255,160,.25); margin-top:14px;">
+        <div><%= success %></div>
+      </div>
+    <% } %>
+
+    <form class="card" style="margin-top:16px;" action="/artists/me/edit" method="POST">
+      <div class="formGrid" style="display:grid; gap:12px; grid-template-columns: 1fr 1fr;">
+        <label style="display:block;">
+          <div style="margin-bottom:6px; opacity:.85;">Nom / Pseudo</div>
+          <input class="input" type="text" name="name" value="<%= artist.name || '' %>" required />
+        </label>
+
+        <label style="display:block;">
+          <div style="margin-bottom:6px; opacity:.85;">Ville</div>
+          <input class="input" type="text" name="city" value="<%= artist.city || '' %>" required />
+        </label>
+
+        <label style="display:block;">
+          <div style="margin-bottom:6px; opacity:.85;">Code postal</div>
+          <input class="input" type="text" name="postalCode" value="<%= artist.postalCode || '' %>" required />
+        </label>
+
+        <label style="display:block;">
+          <div style="margin-bottom:6px; opacity:.85;">Téléphone</div>
+          <input class="input" type="text" name="phone" value="<%= artist.phone || '' %>" placeholder="06 00 00 00 00" />
+        </label>
+
+        <label style="display:block; grid-column: 1 / -1;">
+          <div style="margin-bottom:6px; opacity:.85;">Styles (séparés par des virgules)</div>
+          <input class="input" type="text" name="styles" value="<%= (artist.styles && artist.styles.length) ? artist.styles.join(', ') : '' %>" placeholder="fineline, blackwork, japonais..." />
+        </label>
+
+        <label style="display:block;">
+          <div style="margin-bottom:6px; opacity:.85;">Instagram</div>
+          <input class="input" type="text" name="instagram" value="<%= artist.instagram || '' %>" placeholder="instagram.com/..." />
+        </label>
+
+        <label style="display:block;">
+          <div style="margin-bottom:6px; opacity:.85;">Facebook</div>
+          <input class="input" type="text" name="facebook" value="<%= artist.facebook || '' %>" placeholder="facebook.com/..." />
+        </label>
+
+        <label style="display:block; grid-column: 1 / -1;">
+          <div style="margin-bottom:6px; opacity:.85;">Site web</div>
+          <input class="input" type="text" name="website" value="<%= artist.website || '' %>" placeholder="https://..." />
+        </label>
+
+        <label style="display:block; grid-column: 1 / -1;">
+          <div style="margin-bottom:6px; opacity:.85;">Bio</div>
+          <textarea class="textareaBio" name="bio" rows="6" placeholder="Parle de ton univers, de ton expérience, de tes spécialités..."><%= artist.bio || '' %></textarea>
+        </label>
+      </div>
+
+      <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+        <button class="btn" type="submit">Enregistrer</button>
+        <a class="btn btn--ghost" href="/artists/me">Annuler</a>
+      </div>
+    </form>
+  </div>
+</main>
+
+</body>
+</html>

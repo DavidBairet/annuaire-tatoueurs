@@ -54,6 +54,11 @@ function normalizeForSearch(s = "") {
     .trim();
 }
 
+function requireArtist(req, res, next) {
+  if (!req.session?.artistId) return res.redirect("/artists/login");
+  next();
+}
+
 router.get("/", async (req, res) => {
   try {
     const q = cleanText(req.query.q || "");
@@ -163,6 +168,188 @@ router.post("/logout", (req, res) => {
   res.redirect("/");
 });
 
+router.get("/me", requireArtist, async (req, res) => {
+  try {
+    const artist = await Artist.findById(req.session.artistId);
+
+    if (!artist) {
+      req.session.artistId = null;
+      return res.redirect("/artists/login");
+    }
+
+    res.render("artists/me", {
+      title: "Mon espace artiste",
+      artist,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erreur serveur");
+  }
+});
+
+router.get("/me/edit", requireArtist, async (req, res) => {
+  try {
+    const artist = await Artist.findById(req.session.artistId);
+
+    if (!artist) {
+      req.session.artistId = null;
+      return res.redirect("/artists/login");
+    }
+
+    res.render("artists/edit", {
+      title: "Modifier ma fiche",
+      artist,
+      error: null,
+      success: null,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erreur serveur");
+  }
+});
+
+router.post("/me/edit", requireArtist, async (req, res) => {
+  try {
+    const artist = await Artist.findById(req.session.artistId);
+
+    if (!artist) {
+      req.session.artistId = null;
+      return res.redirect("/artists/login");
+    }
+
+    const name = cleanText(req.body.name);
+    const city = cleanText(req.body.city);
+    const postalCode = cleanText(req.body.postalCode);
+    const department = deptFromPostal(postalCode);
+
+    const phone = cleanPhone(req.body.phone);
+    const styles = cleanList(req.body.styles);
+
+    const instagram = cleanUrl(req.body.instagram);
+    const facebook = cleanUrl(req.body.facebook);
+    const website = cleanUrl(req.body.website);
+
+    const bio = cleanText(req.body.bio);
+
+    const artistForRender = {
+      ...artist.toObject(),
+      name,
+      city,
+      postalCode,
+      department,
+      phone,
+      styles,
+      instagram,
+      facebook,
+      website,
+      bio,
+    };
+
+    if (name.length < 2 || name.length > 50) {
+      return res.status(400).render("artists/edit", {
+        title: "Modifier ma fiche",
+        artist: artistForRender,
+        error: "Nom invalide",
+        success: null,
+      });
+    }
+
+    if (city.length < 2 || city.length > 50) {
+      return res.status(400).render("artists/edit", {
+        title: "Modifier ma fiche",
+        artist: artistForRender,
+        error: "Ville invalide",
+        success: null,
+      });
+    }
+
+    if (!/^\d{5}$/.test(postalCode)) {
+      return res.status(400).render("artists/edit", {
+        title: "Modifier ma fiche",
+        artist: artistForRender,
+        error: "Code postal invalide",
+        success: null,
+      });
+    }
+
+    artist.name = name;
+    artist.city = city;
+    artist.postalCode = postalCode;
+    artist.department = department;
+    artist.phone = phone;
+    artist.styles = styles;
+    artist.instagram = instagram;
+    artist.facebook = facebook;
+    artist.website = website;
+    artist.bio = bio;
+
+    await artist.save();
+
+    res.render("artists/edit", {
+      title: "Modifier ma fiche",
+      artist,
+      error: null,
+      success: "✅ Fiche mise à jour !",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erreur serveur");
+  }
+});
+
+router.get("/me/delete", requireArtist, async (req, res) => {
+  try {
+    const artist = await Artist.findById(req.session.artistId);
+
+    if (!artist) {
+      req.session.artistId = null;
+      return res.redirect("/artists/login");
+    }
+
+    res.render("artists/delete", {
+      title: "Supprimer mon compte",
+      artist,
+      error: null,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erreur serveur");
+  }
+});
+
+router.post("/me/delete", requireArtist, async (req, res) => {
+  try {
+    const artist = await Artist.findById(req.session.artistId);
+
+    if (!artist) {
+      req.session.artistId = null;
+      return res.redirect("/artists/login");
+    }
+
+    const password = String(req.body.password || "");
+    const confirm = cleanText(req.body.confirm || "");
+
+    const ok = await bcrypt.compare(password, artist.passwordHash);
+
+    if (!ok || confirm !== "SUPPRIMER") {
+      return res.status(400).render("artists/delete", {
+        title: "Supprimer mon compte",
+        artist,
+        error: "Mot de passe incorrect ou confirmation invalide (tape SUPPRIMER).",
+      });
+    }
+
+    await Artist.deleteOne({ _id: artist._id });
+
+    req.session.artistId = null;
+
+    res.redirect("/");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erreur serveur");
+  }
+});
+
 router.post("/apply", async (req, res) => {
   try {
     if (req.body.honeypot && String(req.body.honeypot).trim() !== "") {
@@ -210,7 +397,6 @@ router.post("/apply", async (req, res) => {
     }
 
     const emailLower = email.toLowerCase();
-
     const exists = await Artist.findOne({ email: emailLower });
 
     if (exists) {
@@ -272,9 +458,7 @@ router.get("/verify/:token", async (req, res) => {
     });
 
     if (!artist) {
-      return res.status(400).render("artists/verify_failed", {
-        title: "Lien invalide",
-      });
+      return res.status(400).send("Lien invalide");
     }
 
     artist.emailVerified = true;
@@ -301,7 +485,7 @@ router.get("/:id", async (req, res) => {
     });
 
     if (!artist) {
-      return res.status(404).render("404", { title: "Artiste introuvable" });
+      return res.status(404).send("Artiste introuvable");
     }
 
     res.render("artists/show", {
@@ -310,7 +494,7 @@ router.get("/:id", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(404).render("404", { title: "Artiste introuvable" });
+    res.status(404).send("Artiste introuvable");
   }
 });
 
