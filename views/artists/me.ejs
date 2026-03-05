@@ -28,7 +28,6 @@
 </header>
 
 <main class="section">
-
   <div class="container">
 
     <h1 class="pageTitle">Espace artiste</h1>
@@ -41,9 +40,7 @@
       <h2 style="margin-top:0;">Ma fiche</h2>
 
       <p><strong>Email :</strong> <%= artist.email %></p>
-
       <p><strong>Ville :</strong> <%= artist.city || "-" %></p>
-
       <p><strong>Département :</strong> <%= artist.department || "-" %></p>
 
       <p>
@@ -54,9 +51,7 @@
       <p>
         <strong>Instagram :</strong>
         <% if (artist.instagram) { %>
-          <a href="<%= artist.instagram %>" target="_blank" rel="noreferrer">
-            <%= artist.instagram %>
-          </a>
+          <a href="<%= artist.instagram %>" target="_blank" rel="noreferrer"><%= artist.instagram %></a>
         <% } else { %>
           -
         <% } %>
@@ -72,10 +67,38 @@
         <a class="btn btn--ghost" href="/artists/me/delete">Supprimer mon compte</a>
       </div>
 
+      <hr style="margin:18px 0; opacity:.25;">
+
+      <h3 style="margin:0 0 10px;">Galerie</h3>
+
+      <form action="/artists/me/upload" method="POST" enctype="multipart/form-data" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <input type="file" name="image" accept="image/*" required>
+        <button class="btn" type="submit">Ajouter une photo</button>
+      </form>
+
+      <% if (artist.gallery && artist.gallery.length) { %>
+        <div style="margin-top:16px; display:grid; grid-template-columns:repeat(auto-fill,150px); gap:10px;">
+          <% artist.gallery.forEach((img) => { %>
+            <div style="position:relative; width:150px; height:150px;">
+              <img
+                src="<%= img %>"
+                alt="Tatouage"
+                style="width:150px; height:150px; object-fit:cover; border-radius:10px;"
+              >
+              <form action="/artists/me/gallery/delete" method="POST" style="position:absolute; top:6px; right:6px; margin:0;">
+                <input type="hidden" name="img" value="<%= img %>">
+                <button type="submit" class="btn btn--ghost" style="padding:6px 10px; line-height:1;">✕</button>
+              </form>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p style="margin-top:12px; opacity:.8;">Aucune photo pour le moment.</p>
+      <% } %>
+
     </div>
 
   </div>
-
 </main>
 
 </body>

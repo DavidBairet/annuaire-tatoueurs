@@ -3,9 +3,12 @@ const router = express.Router();
 
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const fs = require("fs/promises");
+const path = require("path");
 
 const Artist = require("../models/Artist");
 const sendVerificationEmail = require("../config/mailer");
+const upload = require("../config/multer");
 
 function cleanText(v = "") {
   return String(v).trim();
@@ -28,9 +31,7 @@ function cleanUrl(v = "") {
 
 function cleanPhone(v = "") {
   const digits = String(v).replace(/\D/g, "");
-  if (digits.length === 10) {
-    return digits.replace(/(\d{2})(?=\d)/g, "$1 ").trim();
-  }
+  if (digits.length === 10) return digits.replace(/(\d{2})(?=\d)/g, "$1 ").trim();
   return digits;
 }
 
@@ -155,7 +156,6 @@ router.post("/login", async (req, res) => {
     }
 
     req.session.artistId = artist._id;
-
     res.redirect("/artists/me");
   } catch (error) {
     console.error(error);
@@ -171,7 +171,6 @@ router.post("/logout", (req, res) => {
 router.get("/me", requireArtist, async (req, res) => {
   try {
     const artist = await Artist.findById(req.session.artistId);
-
     if (!artist) {
       req.session.artistId = null;
       return res.redirect("/artists/login");
@@ -187,10 +186,60 @@ router.get("/me", requireArtist, async (req, res) => {
   }
 });
 
+router.post("/me/upload", requireArtist, upload.single("image"), async (req, res) => {
+  try {
+    const artist = await Artist.findById(req.session.artistId);
+    if (!artist) {
+      req.session.artistId = null;
+      return res.redirect("/artists/login");
+    }
+
+    if (!req.file) return res.redirect("/artists/me");
+
+    artist.gallery = artist.gallery || [];
+    artist.gallery.push("/uploads/tattoos/" + req.file.filename);
+    await artist.save();
+
+    res.redirect("/artists/me");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erreur upload");
+  }
+});
+
+router.post("/me/gallery/delete", requireArtist, async (req, res) => {
+  try {
+    const artist = await Artist.findById(req.session.artistId);
+    if (!artist) {
+      req.session.artistId = null;
+      return res.redirect("/artists/login");
+    }
+
+    const img = cleanText(req.body.img || "");
+    if (!img) return res.redirect("/artists/me");
+
+    const idx = (artist.gallery || []).indexOf(img);
+    if (idx === -1) return res.redirect("/artists/me");
+
+    artist.gallery.splice(idx, 1);
+    await artist.save();
+
+    const rel = img.startsWith("/") ? img.slice(1) : img;
+    if (rel.startsWith("uploads/tattoos/")) {
+      const filePath = path.join(process.cwd(), "public", rel);
+      await fs.unlink(filePath).catch(() => {});
+    }
+
+    res.redirect("/artists/me");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erreur suppression image");
+  }
+});
+
 router.get("/me/edit", requireArtist, async (req, res) => {
   try {
     const artist = await Artist.findById(req.session.artistId);
-
     if (!artist) {
       req.session.artistId = null;
       return res.redirect("/artists/login");
@@ -211,7 +260,6 @@ router.get("/me/edit", requireArtist, async (req, res) => {
 router.post("/me/edit", requireArtist, async (req, res) => {
   try {
     const artist = await Artist.findById(req.session.artistId);
-
     if (!artist) {
       req.session.artistId = null;
       return res.redirect("/artists/login");
@@ -300,7 +348,6 @@ router.post("/me/edit", requireArtist, async (req, res) => {
 router.get("/me/delete", requireArtist, async (req, res) => {
   try {
     const artist = await Artist.findById(req.session.artistId);
-
     if (!artist) {
       req.session.artistId = null;
       return res.redirect("/artists/login");
@@ -320,7 +367,6 @@ router.get("/me/delete", requireArtist, async (req, res) => {
 router.post("/me/delete", requireArtist, async (req, res) => {
   try {
     const artist = await Artist.findById(req.session.artistId);
-
     if (!artist) {
       req.session.artistId = null;
       return res.redirect("/artists/login");
@@ -340,9 +386,7 @@ router.post("/me/delete", requireArtist, async (req, res) => {
     }
 
     await Artist.deleteOne({ _id: artist._id });
-
     req.session.artistId = null;
-
     res.redirect("/");
   } catch (err) {
     console.error(err);
@@ -382,26 +426,15 @@ router.post("/apply", async (req, res) => {
 
     if (!email || email.length < 5 || email.length > 120) return res.status(400).send("Email requis");
     if (!confirmEmail) return res.status(400).send("Confirmation email requise");
-    if (email.toLowerCase() !== confirmEmail.toLowerCase()) {
-      return res.status(400).send("Les emails ne correspondent pas");
-    }
+    if (email.toLowerCase() !== confirmEmail.toLowerCase()) return res.status(400).send("Les emails ne correspondent pas");
 
-    if (password.length < 8 || password.length > 72) {
-      return res.status(400).send("Mot de passe requis");
-    }
-
+    if (password.length < 8 || password.length > 72) return res.status(400).send("Mot de passe requis");
     if (!confirmPassword) return res.status(400).send("Confirmation mot de passe requise");
-
-    if (password !== confirmPassword) {
-      return res.status(400).send("Les mots de passe ne correspondent pas");
-    }
+    if (password !== confirmPassword) return res.status(400).send("Les mots de passe ne correspondent pas");
 
     const emailLower = email.toLowerCase();
     const exists = await Artist.findOne({ email: emailLower });
-
-    if (exists) {
-      return res.redirect("/artists/deja-inscrit");
-    }
+    if (exists) return res.redirect("/artists/deja-inscrit");
 
     const passwordHash = await bcrypt.hash(password, 10);
 
@@ -420,19 +453,17 @@ router.post("/apply", async (req, res) => {
       status: "pending",
       emailVerified: false,
       passwordHash,
+      gallery: [],
     });
 
     const token = crypto.randomBytes(32).toString("hex");
-
     artist.verifyToken = token;
     artist.verifyTokenExpires = new Date(Date.now() + 1000 * 60 * 60 * 24);
 
     await artist.save();
-
     await sendVerificationEmail(artist.email, token);
 
-    const verifyUrl =
-      (process.env.BASE_URL || "http://localhost:3000") + `/artists/verify/${token}`;
+    const verifyUrl = (process.env.BASE_URL || "http://localhost:3000") + `/artists/verify/${token}`;
 
     res.render("artists/apply_success", {
       title: "Demande envoyée",
@@ -441,9 +472,7 @@ router.post("/apply", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-
     if (error.code === 11000) return res.redirect("/artists/deja-inscrit");
-
     res.status(500).send("Erreur lors de l'envoi de la demande");
   }
 });
@@ -457,9 +486,7 @@ router.get("/verify/:token", async (req, res) => {
       verifyTokenExpires: { $gt: new Date() },
     });
 
-    if (!artist) {
-      return res.status(400).send("Lien invalide");
-    }
+    if (!artist) return res.status(400).send("Lien invalide");
 
     artist.emailVerified = true;
     artist.verifyToken = null;
@@ -484,9 +511,7 @@ router.get("/:id", async (req, res) => {
       status: "approved",
     });
 
-    if (!artist) {
-      return res.status(404).send("Artiste introuvable");
-    }
+    if (!artist) return res.status(404).send("Artiste introuvable");
 
     res.render("artists/show", {
       title: artist.name,

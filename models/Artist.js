@@ -19,7 +19,6 @@ const artistSchema = new mongoose.Schema(
       index: true,
     },
 
-    
     address1: {
       type: String,
       trim: true,
@@ -94,7 +93,11 @@ const artistSchema = new mongoose.Schema(
       maxlength: 1200,
     },
 
-    
+    gallery: {
+      type: [String],
+      default: [],
+    },
+
     email: {
       type: String,
       trim: true,
@@ -150,7 +153,6 @@ const artistSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 
 artistSchema.pre("save", function () {
   const full = [
