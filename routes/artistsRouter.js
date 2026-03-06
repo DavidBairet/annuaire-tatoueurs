@@ -1,23 +1,19 @@
 const express = require("express");
-const router = express.Router();
-
 const upload = require("../config/multer");
 const requireArtist = require("../middlewares/requireArtist");
 const artistsController = require("../controllers/artistsController");
 
+const router = express.Router();
 
 router.get("/", artistsController.index);
-
 
 router.get("/apply", artistsController.applyForm);
 router.post("/apply", artistsController.apply);
 router.get("/deja-inscrit", artistsController.dejaInscrit);
 
-
 router.get("/login", artistsController.loginForm);
 router.post("/login", artistsController.login);
 router.post("/logout", artistsController.logout);
-
 
 router.get("/me", requireArtist, artistsController.me);
 router.get("/me/edit", requireArtist, artistsController.editForm);
@@ -32,11 +28,13 @@ router.post(
   artistsController.uploadToGallery
 );
 
-router.post("/me/gallery/delete", requireArtist, artistsController.deleteFromGallery);
-
+router.post(
+  "/me/gallery/delete",
+  requireArtist,
+  artistsController.deleteFromGallery
+);
 
 router.get("/verify/:token", artistsController.verify);
-
 
 router.get("/:id", artistsController.show);
 

@@ -10,126 +10,112 @@ body.page--apply .topbar__inner{
   padding: 24px 0 6px;
 }
 
-
 body.page--apply .applySection{
   min-height: calc(100vh - 130px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 18px;
-
   background:
     radial-gradient(900px 520px at 20% 0%, rgba(227,82,198,0.10), transparent 60%),
     radial-gradient(900px 520px at 80% 10%, rgba(120,70,255,0.08), transparent 60%);
 }
-
 
 body.page--apply .applySection > .container{
   display: flex;
   justify-content: center;
 }
 
-
-body.page--apply form.applyForm{
-  width: min(560px, 100%);
-  margin: 0;
+body.page--apply .applyForm,
+body.page--apply .infoCard{
+  width: min(560px,100%);
+  margin: 0 auto;
   padding: 26px;
   border-radius: 18px;
+}
 
+body.page--apply .applyForm{
   background:
     linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
     var(--card);
-
   border: 1px solid rgba(255,255,255,0.12);
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
 }
 
-
-body.page--apply form.applyForm h1{
+body.page--apply .applyForm h1{
   margin: 0 0 18px;
   font-size: 30px;
 }
 
-
-body.page--apply form.applyForm label{
+body.page--apply .applyForm label{
   display: block;
   margin: 14px 0 6px;
   font-size: 13px;
   color: var(--muted);
 }
 
-
-body.page--apply form.applyForm input,
-body.page--apply form.applyForm textarea{
+body.page--apply .applyForm input,
+body.page--apply .applyForm textarea{
   width: 100%;
   display: block;
   margin-bottom: 14px;
-
   padding: 12px 14px;
-  border-radius: 12px;
-
   border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 12px;
   background: var(--panel);
   color: var(--text);
-
   outline: none;
   font-family: inherit;
   font-size: 14px;
-
-  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
 
-body.page--apply form.applyForm input::placeholder,
-body.page--apply form.applyForm textarea::placeholder{
+body.page--apply .applyForm input::placeholder,
+body.page--apply .applyForm textarea::placeholder{
   color: rgba(242,240,255,0.55);
 }
 
-body.page--apply form.applyForm input:focus,
-body.page--apply form.applyForm textarea:focus{
+body.page--apply .applyForm input:focus,
+body.page--apply .applyForm textarea:focus{
   border-color: rgba(227,82,198,0.55);
   box-shadow: 0 0 0 4px rgba(227,82,198,0.14);
 }
 
-
-body.page--apply form.applyForm textarea{
+body.page--apply .applyForm textarea{
   min-height: 160px;
   padding: 14px;
   resize: vertical;
 }
 
-
-body.page--apply form.applyForm button{
+body.page--apply .applyForm .submitBtn{
   width: 100%;
   display: block;
   margin-top: 10px;
   padding: 12px 14px;
   border-radius: 14px;
-
   border: 1px solid rgba(227,82,198,0.40);
   background: rgba(227,82,198,0.18);
   color: var(--text);
-
   font-weight: 800;
   cursor: pointer;
   transition: .2s ease;
 }
 
-body.page--apply form.applyForm button:hover{
+body.page--apply .applyForm .submitBtn:hover{
   border-color: rgba(227,82,198,0.70);
   filter: brightness(1.06);
 }
 
-
 body.page--apply .hp{
   position: absolute;
   left: -9999px;
-  top: auto;
   width: 1px;
   height: 1px;
   overflow: hidden;
 }
-.alreadyBox{
+
+body.page--apply .alreadyBox{
   margin: 10px 0 18px;
   padding: 12px 14px;
   border-radius: 14px;
@@ -137,54 +123,79 @@ body.page--apply .hp{
   border: 1px solid var(--border);
 }
 
-.alreadyBox__text{
+body.page--apply .alreadyBox__text{
   margin: 0;
+  font-size: .95rem;
   color: rgba(242,240,255,0.85);
-  font-size: 0.95rem;
 }
 
-.alreadyBox__link{
+body.page--apply .alreadyBox__link{
   color: var(--accent);
   text-decoration: none;
   font-weight: 700;
 }
 
-.alreadyBox__link:hover{
+body.page--apply .alreadyBox__link:hover{
   text-decoration: underline;
 }
-.infoCard{
-  width: min(540px, 100%);
-  margin: 0 auto;
-  padding: 26px;
-  border-radius: 18px;
 
+body.page--apply .infoCard{
   background: linear-gradient(
     180deg,
     rgba(20,20,30,0.78),
     rgba(20,20,30,0.62)
   );
-
   border: 1px solid var(--border);
   box-shadow: 0 18px 50px rgba(0,0,0,0.45);
 }
 
-.infoCard__title{
+body.page--apply .infoCard__title{
   margin: 0 0 10px;
 }
 
-.infoCard__text{
+body.page--apply .infoCard__text{
   margin: 0 0 16px;
   color: rgba(242,240,255,0.85);
 }
 
-.infoCard__actions{
+body.page--apply .infoCard__actions{
   display:flex;
   gap:12px;
   flex-wrap:wrap;
 }
 
-.infoCard__hint{
+body.page--apply .infoCard__hint{
   margin-top:14px;
-  color: rgba(242,240,255,0.72);
   font-size:.95rem;
+  color: rgba(242,240,255,0.72);
+}
+
+body.page--apply .passwordField{
+  position: relative;
+}
+
+body.page--apply .passwordField input{
+  padding-right: 46px;
+}
+
+body.page--apply .passwordField .togglePassword{
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 20px;
+  cursor: pointer;
+  opacity: .9;
+}
+
+body.page--apply .passwordField .togglePassword:hover{
+  color: #ffffff;
+  opacity: 1;
+}
+
+body.page--apply .passwordField .togglePassword:focus{
+  outline: none;
 }

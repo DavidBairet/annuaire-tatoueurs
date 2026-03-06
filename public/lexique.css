@@ -2,22 +2,21 @@
   padding: 40px 0 60px;
 }
 
-
 .backLink {
   display: inline-block;
   margin-bottom: 25px;
   padding: 10px 18px;
+  border: 1px solid rgba(227, 82, 198, 0.35);
   border-radius: 12px;
-  text-decoration: none;
+  background: rgba(227, 82, 198, 0.25);
   color: #f2f0ff;
-  background: rgba(227,82,198,0.25);
-  border: 1px solid rgba(227,82,198,0.35);
+  text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .backLink:hover {
   border-color: #e352c6;
-  background: rgba(227,82,198,0.35);
+  background: rgba(227, 82, 198, 0.35);
   transform: translateY(-2px);
 }
 
@@ -26,13 +25,13 @@
 }
 
 .lexiqueHeader h1 {
-  font-size: 36px;
   margin-bottom: 10px;
+  font-size: 36px;
 }
 
 .lexiqueHeader .muted {
-  color: rgba(242,240,255,0.7);
   max-width: 600px;
+  color: rgba(242, 240, 255, 0.7);
 }
 
 .lexiqueList {
@@ -41,12 +40,10 @@
 }
 
 .lexiqueCard {
-  background: rgba(20,20,30,0.65);
-  border: 1px solid rgba(227,82,198,0.25);
-
-  border-radius: 14px;
   padding: 18px;
-
+  border: 1px solid rgba(227, 82, 198, 0.25);
+  border-radius: 14px;
+  background: rgba(20, 20, 30, 0.65);
   transition: all 0.2s ease;
 }
 
@@ -55,53 +52,36 @@
   transform: translateY(-3px);
 }
 
-
-
 .lexiqueCard h2 {
   margin: 0 0 6px;
   font-size: 20px;
   color: #f2f0ff;
 }
 
-
-
-
 .category {
   display: inline-block;
   margin-bottom: 8px;
   padding: 4px 10px;
-
-  font-size: 12px;
   border-radius: 999px;
-
-  background: rgba(227,82,198,0.18);
+  background: rgba(227, 82, 198, 0.18);
   color: #e352c6;
+  font-size: 12px;
 }
-
-
-
 
 .lexiqueCard p {
   margin: 0;
-  color: rgba(242,240,255,0.75);
+  color: rgba(242, 240, 255, 0.75);
   line-height: 1.5;
 }
 
-
-
-
 @media (min-width: 768px) {
-
   .lexiqueList {
     grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
 @media (min-width: 1100px) {
-
   .lexiqueList {
     grid-template-columns: repeat(3, 1fr);
   }
-
 }

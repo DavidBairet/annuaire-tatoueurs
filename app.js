@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const ConnectMongo = require("connect-mongo");
 const bcrypt = require("bcrypt");
+const rateLimit = require("express-rate-limit");
 
 const connectDB = require("./config/db");
 const User = require("./models/User");
@@ -21,13 +22,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const isProd = process.env.NODE_ENV === "production";
 
-const MongoStore =
-  (ConnectMongo && typeof ConnectMongo.create === "function" && ConnectMongo) ||
-  (ConnectMongo && ConnectMongo.default && typeof ConnectMongo.default.create === "function" && ConnectMongo.default) ||
-  null;
+const MongoStore = ConnectMongo.create ? ConnectMongo : ConnectMongo.default;
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: "Trop de tentatives, réessayez dans 15 minutes.",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 app.set("trust proxy", 1);
-
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -36,6 +41,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/admin/login", loginLimiter);
+app.use("/artists/login", loginLimiter);
+app.use("/artists/apply", loginLimiter);
 
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "dev_secret_change_me",
@@ -49,22 +58,30 @@ const sessionOptions = {
   },
 };
 
-if (process.env.MONGO_URI && MongoStore) {
-  sessionOptions.store = MongoStore.create({ mongoUrl: process.env.MONGO_URI });
+if (process.env.MONGO_URI && MongoStore?.create) {
+  sessionOptions.store = MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+  });
 }
 
 app.use(session(sessionOptions));
 
 async function ensureAdminExists() {
   const email = (process.env.ADMIN_EMAIL || "").toLowerCase().trim();
-  const pass = process.env.ADMIN_PASSWORD || "";
-  if (!email || !pass) return;
+  const password = process.env.ADMIN_PASSWORD || "";
 
-  const existing = await User.findOne({ email });
-  if (existing) return;
+  if (!email || !password) return;
 
-  const passwordHash = await bcrypt.hash(pass, 12);
-  await User.create({ email, passwordHash, role: "admin" });
+  const existingAdmin = await User.findOne({ email });
+  if (existingAdmin) return;
+
+  const passwordHash = await bcrypt.hash(password, 12);
+
+  await User.create({
+    email,
+    passwordHash,
+    role: "admin",
+  });
 }
 
 app.use("/", indexRouter);
@@ -72,10 +89,15 @@ app.use("/artists", artistsRouter);
 app.use("/admin", adminRouter);
 app.use("/conseils", adviceRouter);
 app.use("/lexique", lexiqueRouter);
-app.get("/inscription", (req, res) => res.redirect("/artists/apply"));
+
+app.get("/inscription", (req, res) => {
+  res.redirect("/artists/apply");
+});
 
 app.use((req, res) => {
-  res.status(404).render("404", { title: "404 - Page introuvable" });
+  res.status(404).render("404", {
+    title: "404 - Page introuvable",
+  });
 });
 
 app.use((err, req, res, next) => {
@@ -83,13 +105,18 @@ app.use((err, req, res, next) => {
   res.status(500).send("Erreur serveur");
 });
 
-(async () => {
+async function startServer() {
   try {
     await connectDB();
     await ensureAdminExists();
-    app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+
+    app.listen(PORT, () => {
+      console.log(`http://localhost:${PORT}`);
+    });
   } catch (err) {
     console.error(err);
     process.exit(1);
   }
-})();
+}
+
+startServer();

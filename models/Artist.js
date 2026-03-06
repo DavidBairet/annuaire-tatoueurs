@@ -151,10 +151,14 @@ const artistSchema = new mongoose.Schema(
       index: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 artistSchema.pre("save", function () {
+  if (!this.isModified()) return;
+
   const full = [
     this.name,
     this.address1 || "",

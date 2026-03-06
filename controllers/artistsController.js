@@ -16,6 +16,33 @@ const {
   normalizeForSearch,
 } = require("../utils/artistsUtils");
 
+async function getSessionArtist(req) {
+  const artist = await Artist.findById(req.session.artistId);
+
+  if (!artist) {
+    req.session.artistId = null;
+    return null;
+  }
+
+  return artist;
+}
+
+function renderArtistEdit(res, artist, error = null, success = null) {
+  return res.render("artists/edit", {
+    title: "Modifier ma fiche",
+    artist,
+    error,
+    success,
+  });
+}
+
+function renderArtistDelete(res, artist, error = null) {
+  return res.render("artists/delete", {
+    title: "Supprimer mon compte",
+    artist,
+    error,
+  });
+}
 
 exports.index = async (req, res) => {
   try {
@@ -31,13 +58,13 @@ exports.index = async (req, res) => {
       const qNorm = normalizeForSearch(q);
       const tokens = qNorm.split(" ").filter(Boolean).slice(0, 8);
 
-      const andSearchText = tokens.map((t) => ({
-        searchText: { $regex: escapeRegex(t), $options: "i" },
+      const andSearchText = tokens.map((token) => ({
+        searchText: { $regex: escapeRegex(token), $options: "i" },
       }));
 
       const qEsc = escapeRegex(q);
       const rxContains = new RegExp(qEsc, "i");
-      const rxPrefix = new RegExp("^" + qEsc, "i");
+      const rxPrefix = new RegExp(`^${qEsc}`, "i");
 
       const fallbackOr = [
         { name: rxContains },
@@ -50,7 +77,7 @@ exports.index = async (req, res) => {
       if (/^\d{5}$/.test(q)) {
         const dept = deptFromPostal(q);
         const deptEsc = escapeRegex(dept);
-        fallbackOr.push({ department: new RegExp("^" + deptEsc, "i") });
+        fallbackOr.push({ department: new RegExp(`^${deptEsc}`, "i") });
       }
 
       filter.$or = [{ $and: andSearchText }, { $or: fallbackOr }];
@@ -78,7 +105,6 @@ exports.index = async (req, res) => {
   }
 };
 
-
 exports.applyForm = (req, res) => {
   res.render("artists/apply", { title: "Inscription artiste" });
 };
@@ -88,9 +114,11 @@ exports.dejaInscrit = (req, res) => {
 };
 
 exports.loginForm = (req, res) => {
-  res.render("artists/login", { title: "Connexion artiste", error: null });
+  res.render("artists/login", {
+    title: "Connexion artiste",
+    error: null,
+  });
 };
-
 
 exports.login = async (req, res) => {
   try {
@@ -128,12 +156,11 @@ exports.logout = (req, res) => {
   res.redirect("/");
 };
 
-
 exports.me = async (req, res) => {
   try {
-    const artist = await Artist.findById(req.session.artistId);
+    const artist = await getSessionArtist(req);
+
     if (!artist) {
-      req.session.artistId = null;
       return res.redirect("/artists/login");
     }
 
@@ -141,88 +168,96 @@ exports.me = async (req, res) => {
       title: "Mon espace artiste",
       artist,
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Erreur serveur");
   }
 };
 
 exports.uploadToGallery = async (req, res) => {
   try {
-    const artist = await Artist.findById(req.session.artistId);
+    const artist = await getSessionArtist(req);
+
     if (!artist) {
-      req.session.artistId = null;
       return res.redirect("/artists/login");
     }
 
-    if (!req.file) return res.redirect("/artists/me");
+    if (!req.file) {
+      return res.redirect("/artists/me");
+    }
 
     artist.gallery = artist.gallery || [];
-    artist.gallery.push("/uploads/tattoos/" + req.file.filename);
+    artist.gallery.push(`/uploads/tattoos/${req.file.filename}`);
+
     await artist.save();
 
     res.redirect("/artists/me");
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Erreur upload");
   }
 };
 
 exports.deleteFromGallery = async (req, res) => {
   try {
-    const artist = await Artist.findById(req.session.artistId);
+    const artist = await getSessionArtist(req);
+
     if (!artist) {
-      req.session.artistId = null;
       return res.redirect("/artists/login");
     }
 
     const img = cleanText(req.body.img || "");
-    if (!img) return res.redirect("/artists/me");
 
-    const idx = (artist.gallery || []).indexOf(img);
-    if (idx === -1) return res.redirect("/artists/me");
+    if (!img) {
+      return res.redirect("/artists/me");
+    }
 
-    artist.gallery.splice(idx, 1);
+    const gallery = artist.gallery || [];
+    const index = gallery.indexOf(img);
+
+    if (index === -1) {
+      return res.redirect("/artists/me");
+    }
+
+    gallery.splice(index, 1);
+    artist.gallery = gallery;
+
     await artist.save();
 
-    const rel = img.startsWith("/") ? img.slice(1) : img;
-    if (rel.startsWith("uploads/tattoos/")) {
-      const filePath = path.join(process.cwd(), "public", rel);
+    const relativePath = img.startsWith("/") ? img.slice(1) : img;
+
+    if (relativePath.startsWith("uploads/tattoos/")) {
+      const filePath = path.join(process.cwd(), "public", relativePath);
       await fs.unlink(filePath).catch(() => {});
     }
 
     res.redirect("/artists/me");
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Erreur suppression image");
   }
 };
 
 exports.editForm = async (req, res) => {
   try {
-    const artist = await Artist.findById(req.session.artistId);
+    const artist = await getSessionArtist(req);
+
     if (!artist) {
-      req.session.artistId = null;
       return res.redirect("/artists/login");
     }
 
-    res.render("artists/edit", {
-      title: "Modifier ma fiche",
-      artist,
-      error: null,
-      success: null,
-    });
-  } catch (err) {
-    console.error(err);
+    renderArtistEdit(res, artist);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Erreur serveur");
   }
 };
 
 exports.edit = async (req, res) => {
   try {
-    const artist = await Artist.findById(req.session.artistId);
+    const artist = await getSessionArtist(req);
+
     if (!artist) {
-      req.session.artistId = null;
       return res.redirect("/artists/login");
     }
 
@@ -255,30 +290,15 @@ exports.edit = async (req, res) => {
     };
 
     if (name.length < 2 || name.length > 50) {
-      return res.status(400).render("artists/edit", {
-        title: "Modifier ma fiche",
-        artist: artistForRender,
-        error: "Nom invalide",
-        success: null,
-      });
+      return renderArtistEdit(res, artistForRender, "Nom invalide");
     }
 
     if (city.length < 2 || city.length > 50) {
-      return res.status(400).render("artists/edit", {
-        title: "Modifier ma fiche",
-        artist: artistForRender,
-        error: "Ville invalide",
-        success: null,
-      });
+      return renderArtistEdit(res, artistForRender, "Ville invalide");
     }
 
     if (!/^\d{5}$/.test(postalCode)) {
-      return res.status(400).render("artists/edit", {
-        title: "Modifier ma fiche",
-        artist: artistForRender,
-        error: "Code postal invalide",
-        success: null,
-      });
+      return renderArtistEdit(res, artistForRender, "Code postal invalide");
     }
 
     artist.name = name;
@@ -294,42 +314,33 @@ exports.edit = async (req, res) => {
 
     await artist.save();
 
-    res.render("artists/edit", {
-      title: "Modifier ma fiche",
-      artist,
-      error: null,
-      success: "✅ Fiche mise à jour !",
-    });
-  } catch (err) {
-    console.error(err);
+    renderArtistEdit(res, artist, null, "✅ Fiche mise à jour !");
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Erreur serveur");
   }
 };
 
 exports.deleteForm = async (req, res) => {
   try {
-    const artist = await Artist.findById(req.session.artistId);
+    const artist = await getSessionArtist(req);
+
     if (!artist) {
-      req.session.artistId = null;
       return res.redirect("/artists/login");
     }
 
-    res.render("artists/delete", {
-      title: "Supprimer mon compte",
-      artist,
-      error: null,
-    });
-  } catch (err) {
-    console.error(err);
+    renderArtistDelete(res, artist);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Erreur serveur");
   }
 };
 
 exports.deleteAccount = async (req, res) => {
   try {
-    const artist = await Artist.findById(req.session.artistId);
+    const artist = await getSessionArtist(req);
+
     if (!artist) {
-      req.session.artistId = null;
       return res.redirect("/artists/login");
     }
 
@@ -339,22 +350,22 @@ exports.deleteAccount = async (req, res) => {
     const ok = await bcrypt.compare(password, artist.passwordHash);
 
     if (!ok || confirm !== "SUPPRIMER") {
-      return res.status(400).render("artists/delete", {
-        title: "Supprimer mon compte",
+      return renderArtistDelete(
+        res,
         artist,
-        error: "Mot de passe incorrect ou confirmation invalide (tape SUPPRIMER).",
-      });
+        "Mot de passe incorrect ou confirmation invalide (tape SUPPRIMER)."
+      );
     }
 
     await Artist.deleteOne({ _id: artist._id });
     req.session.artistId = null;
+
     res.redirect("/");
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Erreur serveur");
   }
 };
-
 
 exports.apply = async (req, res) => {
   try {
@@ -382,21 +393,48 @@ exports.apply = async (req, res) => {
 
     const bio = cleanText(req.body.bio);
 
-    if (name.length < 2 || name.length > 50) return res.status(400).send("Nom requis");
-    if (city.length < 2 || city.length > 50) return res.status(400).send("Ville requise");
-    if (!/^\d{5}$/.test(postalCode)) return res.status(400).send("Code postal invalide");
+    if (name.length < 2 || name.length > 50) {
+      return res.status(400).send("Nom requis");
+    }
 
-    if (!email || email.length < 5 || email.length > 120) return res.status(400).send("Email requis");
-    if (!confirmEmail) return res.status(400).send("Confirmation email requise");
-    if (email.toLowerCase() !== confirmEmail.toLowerCase()) return res.status(400).send("Les emails ne correspondent pas");
+    if (city.length < 2 || city.length > 50) {
+      return res.status(400).send("Ville requise");
+    }
 
-    if (password.length < 8 || password.length > 72) return res.status(400).send("Mot de passe requis");
-    if (!confirmPassword) return res.status(400).send("Confirmation mot de passe requise");
-    if (password !== confirmPassword) return res.status(400).send("Les mots de passe ne correspondent pas");
+    if (!/^\d{5}$/.test(postalCode)) {
+      return res.status(400).send("Code postal invalide");
+    }
+
+    if (!email || email.length < 5 || email.length > 120) {
+      return res.status(400).send("Email requis");
+    }
+
+    if (!confirmEmail) {
+      return res.status(400).send("Confirmation email requise");
+    }
+
+    if (email.toLowerCase() !== confirmEmail.toLowerCase()) {
+      return res.status(400).send("Les emails ne correspondent pas");
+    }
+
+    if (password.length < 8 || password.length > 72) {
+      return res.status(400).send("Mot de passe requis");
+    }
+
+    if (!confirmPassword) {
+      return res.status(400).send("Confirmation mot de passe requise");
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).send("Les mots de passe ne correspondent pas");
+    }
 
     const emailLower = email.toLowerCase();
     const exists = await Artist.findOne({ email: emailLower });
-    if (exists) return res.redirect("/artists/deja-inscrit");
+
+    if (exists) {
+      return res.redirect("/artists/deja-inscrit");
+    }
 
     const passwordHash = await bcrypt.hash(password, 10);
 
@@ -419,13 +457,16 @@ exports.apply = async (req, res) => {
     });
 
     const token = crypto.randomBytes(32).toString("hex");
+
     artist.verifyToken = token;
     artist.verifyTokenExpires = new Date(Date.now() + 1000 * 60 * 60 * 24);
 
     await artist.save();
     await sendVerificationEmail(artist.email, token);
 
-    const verifyUrl = (process.env.BASE_URL || "http://localhost:3000") + `/artists/verify/${token}`;
+    const verifyUrl =
+      (process.env.BASE_URL || "http://localhost:3000") +
+      `/artists/verify/${token}`;
 
     res.render("artists/apply_success", {
       title: "Demande envoyée",
@@ -434,11 +475,14 @@ exports.apply = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    if (error.code === 11000) return res.redirect("/artists/deja-inscrit");
+
+    if (error.code === 11000) {
+      return res.redirect("/artists/deja-inscrit");
+    }
+
     res.status(500).send("Erreur lors de l'envoi de la demande");
   }
 };
-
 
 exports.verify = async (req, res) => {
   try {
@@ -449,7 +493,9 @@ exports.verify = async (req, res) => {
       verifyTokenExpires: { $gt: new Date() },
     });
 
-    if (!artist) return res.status(400).send("Lien invalide");
+    if (!artist) {
+      return res.status(400).send("Lien invalide");
+    }
 
     artist.emailVerified = true;
     artist.verifyToken = null;
@@ -461,12 +507,11 @@ exports.verify = async (req, res) => {
       title: "Email vérifié",
       artistName: artist.name,
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Erreur serveur");
   }
 };
-
 
 exports.show = async (req, res) => {
   try {
@@ -475,7 +520,9 @@ exports.show = async (req, res) => {
       status: "approved",
     });
 
-    if (!artist) return res.status(404).send("Artiste introuvable");
+    if (!artist) {
+      return res.status(404).send("Artiste introuvable");
+    }
 
     res.render("artists/show", {
       title: artist.name,

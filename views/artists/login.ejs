@@ -1,52 +1,70 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %></title>
 
-<link rel="stylesheet" href="/styles.css">
-<link rel="stylesheet" href="/inscription.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/inscription.css">
 </head>
 
 <body class="page--apply">
 
-<header class="topbar topbar--minimal">
-<div class="container topbar__inner">
-<a class="logo logo--center" href="/">
-<img src="/images/logo.png" class="logo__img">
-<span class="logo__text">Retour à l'Annuaire</span>
-</a>
-</div>
-</header>
+  <header class="topbar topbar--minimal">
+    <div class="container topbar__inner">
+      <a class="logo logo--center" href="/">
+        <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+        <span class="logo__text">Retour à l'Annuaire</span>
+      </a>
+    </div>
+  </header>
 
-<main class="applySection">
+  <main class="applySection">
+    <div class="container">
+      <form class="applyForm" method="POST" action="/artists/login">
+        <h1>Connexion artiste</h1>
 
-<div class="container">
+        <% if (error) { %>
+          <p class="formError"><%= error %></p>
+        <% } %>
 
-<form class="applyForm" method="POST" action="/artists/login">
+        <label for="email">Email</label>
+        <input
+          name="email"
+          id="email"
+          type="email"
+          required
+        >
 
-<h1>Connexion artiste</h1>
+        <label for="password">Mot de passe</label>
 
-<% if (error) { %>
-<p class="formError"><%= error %></p>
-<% } %>
+        <div class="passwordField">
+          <input
+            name="password"
+            id="password"
+            type="password"
+            required
+          >
 
-<label>Email</label>
-<input name="email" type="email" required>
+          <button
+            type="button"
+            class="togglePassword"
+            aria-label="Afficher le mot de passe"
+          >
+            👁
+          </button>
+        </div>
 
-<label>Mot de passe</label>
-<input name="password" type="password" required>
+        <button type="submit" class="submitBtn">
+          Se connecter
+        </button>
+      </form>
+    </div>
+  </main>
 
-<button type="submit">
-Se connecter
-</button>
-
-</form>
-
-</div>
-
-</main>
+ <script src="/login.js"></script>
+  
 
 </body>
 </html>
