@@ -11,14 +11,10 @@
   background: rgba(227, 82, 198, 0.25);
   color: #f2f0ff;
   text-decoration: none;
-  transition: all 0.2s ease;
+  
 }
 
-.backLink:hover {
-  border-color: #e352c6;
-  background: rgba(227, 82, 198, 0.35);
-  transform: translateY(-2px);
-}
+
 
 .lexiqueHeader {
   margin-bottom: 35px;
@@ -47,10 +43,7 @@
   transition: all 0.2s ease;
 }
 
-.lexiqueCard:hover {
-  border-color: #e352c6;
-  transform: translateY(-3px);
-}
+
 
 .lexiqueCard h2 {
   margin: 0 0 6px;
