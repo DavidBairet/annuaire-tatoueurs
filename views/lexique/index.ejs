@@ -12,43 +12,53 @@
 
 <body>
 
-<main class="container lexique">
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a href="/" class="logo">
+        <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+        <span class="logo__text">Annuaire</span>
+      </a>
 
-  <a href="/" class="backLink">← Retour à l'annuaire</a>
-
-  <header class="lexiqueHeader">
-    <h1><%= title %></h1>
-    <p class="muted">
-      Les termes les plus courants dans le monde du tatouage.
-    </p>
+      <nav class="menu" aria-label="Navigation principale">
+        <a href="/">Accueil</a>
+        <a href="/conseils">Conseils</a>
+        <a href="/artists/login" class="menu__login">Connexion artiste</a>
+        <a href="/artists/apply">Inscription artiste</a>
+      </nav>
+    </div>
   </header>
 
+  <main class="container lexique">
 
-  <section class="lexiqueList">
+   
 
-    <% terms.forEach(term => { %>
+    <header class="lexiqueHeader">
+      <h1><%= title %></h1>
+      <p class="muted">
+        Les termes les plus courants dans le monde du tatouage.
+      </p>
+    </header>
 
-      <article class="lexiqueCard">
+    <section class="lexiqueList">
+      <% terms.forEach(term => { %>
+        <article class="lexiqueCard">
+          <h2><%= term.term %></h2>
 
-        <h2><%= term.term %></h2>
+          <span class="category">
+            <%= term.category %>
+          </span>
 
-        <span class="category">
-          <%= term.category %>
-        </span>
+          <p>
+            <%= term.definition %>
+          </p>
+        </article>
+      <% }) %>
+    </section>
 
-        <p>
-          <%= term.definition %>
-        </p>
+  </main>
 
-      </article>
+  <button id="scrollTopBtn" aria-label="Retour en haut">↑</button>
 
-    <% }) %>
-
-  </section>
-
-</main>
-<button id="scrollTopBtn" aria-label="Retour en haut">↑</button>
-
-<script src="/scrollTop.js"></script>
+  <script src="/scrollTop.js"></script>
 </body>
 </html>

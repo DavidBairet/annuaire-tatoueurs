@@ -12,98 +12,117 @@
 
 <body>
 
-  <main class="container advice">
+<header class="topbar">
+  <div class="container topbar__inner">
 
-    <a href="/" class="backLink">← Retour à l'annuaire</a>
+    <a href="/" class="logo">
+      <img src="/images/logo.png" alt="Logo Annuaire" class="logo__img">
+      <span class="logo__text">Annuaire</span>
+    </a>
 
-    <header class="adviceHeader">
-      <div>
-        <p class="kicker">Guides & bonnes pratiques</p>
-        <h1><%= title %></h1>
-        <p class="muted">
-          Des conseils simples pour préparer ton tatouage, choisir un pro, et bien cicatriser.
-        </p>
+    <nav class="menu" aria-label="Navigation principale">
+      <a href="/">Accueil</a>
+      <a href="/lexique">Lexique</a>
+      <a href="/artists/login" class="menu__login">Connexion artiste</a>
+      <a href="/artists/apply">Inscription artiste</a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="container advice">
+
+  
+
+  <header class="adviceHeader">
+    <div>
+      <p class="kicker">Guides & bonnes pratiques</p>
+      <h1><%= title %></h1>
+      <p class="muted">
+        Des conseils simples pour préparer ton tatouage, choisir un pro, et bien cicatriser.
+      </p>
+    </div>
+  </header>
+
+  <% if (!tips || tips.length === 0) { %>
+
+  <div class="empty">
+    <h2>Aucun résultat</h2>
+
+    <p class="muted">
+      Aucun conseil disponible pour le moment.
+    </p>
+
+    <a class="btnGhost" href="/conseils">
+      Voir tous les conseils
+    </a>
+  </div>
+
+  <% } else { %>
+
+  <section class="tipsGrid">
+
+    <% tips.forEach((t) => { %>
+
+    <article class="tipCard">
+
+      <div class="tipTop">
+
+        <h2><%= t.title %></h2>
+
+        <% if (t.tags && t.tags.length) { %>
+        <div class="tags">
+
+          <% t.tags.forEach((tag) => { %>
+          <span class="tag"><%= tag %></span>
+          <% }) %>
+
+        </div>
+        <% } %>
+
       </div>
-    </header>
 
+      <% if (t.content && t.content.length) { %>
 
-    <% if (!tips || tips.length === 0) { %>
+      <ul class="tipList">
 
-      <div class="empty">
-        <h2>Aucun résultat</h2>
-        <p class="muted">
-          Aucun conseil disponible pour le moment.
-        </p>
-
-        <a class="btnGhost" href="/conseils">
-          Voir tous les conseils
-        </a>
-      </div>
-
-    <% } else { %>
-
-      <section class="tipsGrid">
-
-        <% tips.forEach((t) => { %>
-
-          <article class="tipCard">
-
-            <div class="tipTop">
-
-              <h2><%= t.title %></h2>
-
-              <% if (t.tags && t.tags.length) { %>
-                <div class="tags">
-                  <% t.tags.forEach((tag) => { %>
-                    <span class="tag"><%= tag %></span>
-                  <% }) %>
-                </div>
-              <% } %>
-
-            </div>
-
-
-            <% if (t.content && t.content.length) { %>
-
-              <ul class="tipList">
-
-                <% t.content.forEach((line) => { %>
-                  <li><%= line %></li>
-                <% }) %>
-
-              </ul>
-
-            <% } %>
-
-          </article>
-
+        <% t.content.forEach((line) => { %>
+        <li><%= line %></li>
         <% }) %>
 
-      </section>
+      </ul>
 
-    <% } %>
+      <% } %>
 
+    </article>
 
-    <section class="callout">
+    <% }) %>
 
-      <div>
-        <h2>Tu veux être visible sur l’annuaire ?</h2>
+  </section>
 
-        <p class="muted">
-          Crée ta fiche tatoueur et ajoute tes styles, ta ville, ton Instagram et tes infos de contact.
-        </p>
-      </div>
+  <% } %>
 
-      <a class="btnPrimary" href="/artists/apply">
-        Créer ma fiche tatoueur
-      </a>
+  <section class="callout">
 
-    </section>
+    <div>
+      <h2>Tu veux être visible sur l’annuaire ?</h2>
 
-  </main>
+      <p class="muted">
+        Crée ta fiche tatoueur et ajoute tes styles, ta ville, ton Instagram et tes infos de contact.
+      </p>
+    </div>
+
+    <a class="btnPrimary" href="/artists/apply">
+      Créer ma fiche tatoueur
+    </a>
+
+  </section>
+
+</main>
+
 <button id="scrollTopBtn" aria-label="Retour en haut">↑</button>
 
 <script src="/scrollTop.js"></script>
-</body>
 
+</body>
 </html>
