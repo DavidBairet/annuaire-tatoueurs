@@ -1,3 +1,19 @@
 <footer class="footer">
-    <small>© <%= new Date().getFullYear() %></small>
+  <small>© <%= new Date().getFullYear() %></small>
+
+  <div id="cookie-banner" style="position:fixed;bottom:0;left:0;width:100%;background:#111;color:#fff;padding:15px;text-align:center;z-index:9999;">
+    Ce site utilise des cookies pour améliorer votre expérience.
+    <button onclick="acceptCookies()">Accepter</button>
+  </div>
+
+  <script>
+    function acceptCookies() {
+      localStorage.setItem("cookiesAccepted", "true");
+      document.getElementById("cookie-banner").style.display = "none";
+    }
+
+    if (localStorage.getItem("cookiesAccepted")) {
+      document.getElementById("cookie-banner").style.display = "none";
+    }
+  </script>
 </footer>

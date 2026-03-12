@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Annuaire de tatoueurs</title>
 
-  <link rel="stylesheet" href="/styles.css" />
-  <link rel="icon" href="/images/logo.png">
+<link rel="stylesheet" href="/styles.css?v=2" />
+<link rel="icon" href="/images/logo.png?v=2">
+<img src="/images/logo.png?v=2" alt="" class="logo__img">
   <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -120,6 +121,20 @@
   </div>
 </footer>
 
+<div id="cookie-banner" style="position:fixed;bottom:0;left:0;width:100%;background:#111;color:#fff;padding:15px;text-align:center;z-index:9999;">
+  Ce site utilise des cookies pour améliorer votre expérience.
+  <button onclick="acceptCookies()">Accepter</button>
+</div>
 
+<script>
+function acceptCookies() {
+  localStorage.setItem("cookiesAccepted", "true");
+  document.getElementById("cookie-banner").style.display = "none";
+}
+
+if (localStorage.getItem("cookiesAccepted")) {
+  document.getElementById("cookie-banner").style.display = "none";
+}
+</script>
 </body>
 </html>

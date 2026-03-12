@@ -10,10 +10,12 @@ async function connectDB() {
   try {
     await mongoose.connect(uri);
     console.log("✅ MongoDB connecté");
+    return true;
   } catch (err) {
     console.error("❌ Erreur MongoDB :", err.message);
-    process.exit(1);
+    return false;
   }
 }
 
 module.exports = connectDB;
+

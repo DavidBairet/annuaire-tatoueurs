@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
-const path = require("node:path");
+const path = require("path");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -9,6 +9,7 @@ const ConnectMongo = require("connect-mongo");
 const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
 
+const Artist = require("./models/Artist");
 const connectDB = require("./config/db");
 const User = require("./models/User");
 
@@ -36,7 +37,7 @@ app.set("trust proxy", 1);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use(helmet());
+//app.use(helmet());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -90,6 +91,40 @@ app.use("/admin", adminRouter);
 app.use("/conseils", adviceRouter);
 app.use("/lexique", lexiqueRouter);
 
+app.get("/sitemap.xml", async (req, res) => {
+  try {
+    const baseUrl = "https://annuaire-tatoueurs.fr";
+    const artists = await Artist.find({}, "_id");
+
+    let urls = `
+  <url>
+    <loc>${baseUrl}</loc>
+    <priority>1.0</priority>
+  </url>
+  `;
+
+    artists.forEach((artist) => {
+      urls += `
+  <url>
+    <loc>${baseUrl}/artists/${artist._id}</loc>
+    <priority>0.8</priority>
+  </url>
+  `;
+    });
+
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>`;
+
+    res.header("Content-Type", "application/xml");
+    res.send(sitemap);
+  } catch (err) {
+    console.error("Erreur sitemap :", err.message);
+    res.status(500).send("Erreur serveur");
+  }
+});
+
 app.get("/inscription", (req, res) => {
   res.redirect("/artists/apply");
 });
@@ -104,18 +139,21 @@ app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).send("Erreur serveur");
 });
-
 async function startServer() {
-  try {
-    await connectDB();
-    await ensureAdminExists();
+  app.listen(PORT, () => {
+    console.log(`http://localhost:${PORT}`);
+  });
 
-    app.listen(PORT, () => {
-      console.log(`http://localhost:${PORT}`);
-    });
+  try {
+    const dbConnected = await connectDB();
+
+    if (dbConnected) {
+      await ensureAdminExists();
+    } else {
+      console.log("⚠️ Démarrage sans MongoDB pour le moment.");
+    }
   } catch (err) {
     console.error(err);
-    process.exit(1);
   }
 }
 
