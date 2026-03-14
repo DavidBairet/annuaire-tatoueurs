@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/admin.css">
+
+  <style>
+    .wrap{
+      width:min(900px,92vw);
+      margin:40px auto;
+    }
+
+    .card{
+      padding:20px;
+      border-radius:18px;
+      border:1px solid rgba(227,82,198,.22);
+      background: linear-gradient(
+        180deg,
+        rgba(18,18,26,.75),
+        rgba(26,26,40,.80)
+      );
+    }
+
+    .formGrid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:16px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .fieldFull{
+      grid-column:1 / -1;
+    }
+
+    label{
+      font-weight:600;
+    }
+
+    input,
+    textarea,
+    select{
+      width:100%;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(227,82,198,.25);
+      background: rgba(18,18,26,.55);
+      color:inherit;
+      outline:none;
+    }
+
+    textarea{
+      min-height:140px;
+      resize:vertical;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .btn{
+      border:1px solid rgba(227,82,198,.25);
+      background: rgba(18,18,26,.55);
+      padding:10px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .btnPrimary{
+      border-color: rgba(227,82,198,.6);
+      background: rgba(227,82,198,.14);
+    }
+
+    @media (max-width: 720px){
+      .formGrid{
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <h1>Modifier l’artiste</h1>
+
+    <div class="card">
+      <form method="POST" action="/admin/artists/<%= artist._id %>/edit">
+        <div class="formGrid">
+
+          <div class="field">
+            <label for="name">Nom</label>
+            <input id="name" name="name" type="text" value="<%= artist.name || '' %>" required>
+          </div>
+
+          <div class="field">
+            <label for="phone">Téléphone</label>
+            <input id="phone" name="phone" type="text" value="<%= artist.phone || '' %>">
+          </div>
+
+          <div class="field">
+            <label for="address1">Adresse</label>
+            <input id="address1" name="address1" type="text" value="<%= artist.address1 || '' %>" required>
+          </div>
+
+          <div class="field">
+            <label for="address2">Complément d’adresse</label>
+            <input id="address2" name="address2" type="text" value="<%= artist.address2 || '' %>">
+          </div>
+
+          <div class="field">
+            <label for="city">Ville</label>
+            <input id="city" name="city" type="text" value="<%= artist.city || '' %>" required>
+          </div>
+
+          <div class="field">
+            <label for="postalCode">Code postal</label>
+            <input id="postalCode" name="postalCode" type="text" value="<%= artist.postalCode || '' %>">
+          </div>
+
+          <div class="field">
+            <label for="department">Département</label>
+            <input id="department" name="department" type="text" value="<%= artist.department || '' %>">
+          </div>
+
+          <div class="field">
+            <label for="status">Statut</label>
+            <select id="status" name="status">
+              <option value="pending" <%= artist.status === "pending" ? "selected" : "" %>>En attente</option>
+              <option value="approved" <%= artist.status === "approved" ? "selected" : "" %>>Validé</option>
+              <option value="rejected" <%= artist.status === "rejected" ? "selected" : "" %>>Refusé</option>
+            </select>
+          </div>
+
+          <div class="field fieldFull">
+            <label for="styles">Styles (séparés par des virgules)</label>
+            <input
+              id="styles"
+              name="styles"
+              type="text"
+              value="<%= artist.styles && artist.styles.length ? artist.styles.join(', ') : '' %>">
+          </div>
+
+          <div class="field">
+            <label for="instagram">Instagram</label>
+            <input id="instagram" name="instagram" type="text" value="<%= artist.instagram || '' %>">
+          </div>
+
+          <div class="field">
+            <label for="facebook">Facebook</label>
+            <input id="facebook" name="facebook" type="text" value="<%= artist.facebook || '' %>">
+          </div>
+
+          <div class="field fieldFull">
+            <label for="website">Site web</label>
+            <input id="website" name="website" type="text" value="<%= artist.website || '' %>">
+          </div>
+
+          <div class="field fieldFull">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" value="<%= artist.email || '' %>">
+          </div>
+
+          <div class="field fieldFull">
+            <label for="bio">Bio</label>
+            <textarea id="bio" name="bio"><%= artist.bio || '' %></textarea>
+          </div>
+
+        </div>
+
+        <div class="actions">
+          <button class="btn btnPrimary" type="submit">💾 Enregistrer</button>
+          <a class="btn" href="/admin">← Retour admin</a>
+          <a class="btn" href="/artists/<%= artist._id %>">Voir la fiche</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

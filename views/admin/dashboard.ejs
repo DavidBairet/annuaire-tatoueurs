@@ -304,54 +304,56 @@
 
 
         <!-- ACTIONS -->
-        <div class="actions">
+<div class="actions">
 
-          <% if (status === "pending") { %>
+  <a class="btnSmall btn" href="/admin/artists/<%= a._id %>/edit">
+    ✏️ Modifier
+  </a>
 
-            <form method="POST"
-                  action="/admin/artists/<%= a._id %>/approve">
+  <% if (status === "pending") { %>
 
-              <button class="btnSmall btn" type="submit">
-                ✅ Approuver
-              </button>
+    <form method="POST"
+          action="/admin/artists/<%= a._id %>/approve">
 
-            </form>
+      <button class="btnSmall btn" type="submit">
+        ✅ Approuver
+      </button>
 
+    </form>
 
-            <form method="POST"
-                  action="/admin/artists/<%= a._id %>/reject">
+    <form method="POST"
+          action="/admin/artists/<%= a._id %>/reject">
 
-              <button class="btnSmall btn" type="submit">
-                ❌ Refuser
-              </button>
+      <button class="btnSmall btn" type="submit">
+        ❌ Refuser
+      </button>
 
-            </form>
+    </form>
 
-          <% } else { %>
+  <% } else { %>
 
-            <form method="POST"
-                  action="/admin/artists/<%= a._id %>/pending">
+    <form method="POST"
+          action="/admin/artists/<%= a._id %>/pending">
 
-              <button class="btnSmall btn" type="submit">
-                ↩ Remettre en attente
-              </button>
+      <button class="btnSmall btn" type="submit">
+        ↩ Remettre en attente
+      </button>
 
-            </form>
+    </form>
 
-          <% } %>
+  <% } %>
 
+  <form method="POST"
+        action="/admin/artists/<%= a._id %>/delete"
+        onsubmit="return confirm('Supprimer définitivement ?');">
 
-          <form method="POST"
-                action="/admin/artists/<%= a._id %>/delete"
-                onsubmit="return confirm('Supprimer définitivement ?');">
+    <button class="btnSmall btn danger" type="submit">
+      🗑 Supprimer
+    </button>
 
-            <button class="btnSmall btn danger" type="submit">
-              🗑 Supprimer
-            </button>
+  </form>
 
-          </form>
-
-        </div>
+</div>
 
       </div>
 

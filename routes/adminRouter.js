@@ -18,6 +18,9 @@ router.get("/", requireAdmin, adminController.dashboard);
 router.get("/artists/new", requireAdmin, adminController.newArtistForm);
 router.post("/artists", requireAdmin, adminController.createArtist);
 
+router.get("/artists/:id/edit", requireAdmin, adminController.editArtistForm);
+router.post("/artists/:id/edit", requireAdmin, adminController.updateArtist);
+
 router.post("/artists/:id/approve", requireAdmin, adminController.setStatusApproved);
 router.post("/artists/:id/reject", requireAdmin, adminController.setStatusRejected);
 router.post("/artists/:id/pending", requireAdmin, adminController.setStatusPending);

@@ -166,7 +166,84 @@ exports.createArtist = async (req, res) => {
     return res.status(500).send("Erreur lors de la création.");
   }
 };
+exports.editArtistForm = async (req, res) => {
+  try {
+    const artist = await Artist.findById(req.params.id);
 
+    if (!artist) {
+      return res.status(404).send("Artiste introuvable.");
+    }
+
+    res.render("admin/edit_artist", {
+      title: `Modifier ${artist.name}`,
+      artist,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Erreur serveur");
+  }
+};
+
+exports.updateArtist = async (req, res) => {
+  try {
+    const name = cleanText(req.body.name);
+    const address1 = cleanText(req.body.address1);
+    const address2 = cleanText(req.body.address2);
+    const city = cleanText(req.body.city);
+    const postalCode = cleanText(req.body.postalCode);
+    const department = cleanText(req.body.department);
+    const phone = cleanText(req.body.phone);
+
+    const styles = cleanList(req.body.styles);
+
+    const instagram = cleanText(req.body.instagram);
+    const facebook = cleanText(req.body.facebook);
+    const website = cleanText(req.body.website);
+
+    const emailRaw = cleanText(req.body.email);
+    const email = emailRaw ? emailRaw.toLowerCase() : undefined;
+
+    const bio = cleanText(req.body.bio);
+    const status = cleanText(req.body.status || "approved");
+
+    if (name.length < 2) {
+      return res.status(400).send("Nom requis.");
+    }
+
+    if (address1.length < 3) {
+      return res.status(400).send("Adresse requise.");
+    }
+
+    if (city.length < 2) {
+      return res.status(400).send("Ville requise.");
+    }
+
+    await Artist.findByIdAndUpdate(req.params.id, {
+      name,
+      address1,
+      address2,
+      city,
+      postalCode,
+      department,
+      phone,
+      styles,
+      instagram,
+      facebook,
+      website,
+      email,
+      bio,
+      status,
+    });
+
+    return res.redirect("/admin?status=approved");
+  } catch (err) {
+    console.error(err);
+    if (err.code === 11000) {
+      return res.status(400).send("Cet email est déjà utilisé.");
+    }
+    return res.status(500).send("Erreur lors de la mise à jour.");
+  }
+};
 exports.setStatusApproved = async (req, res) => {
   await Artist.findByIdAndUpdate(req.params.id, { status: "approved" });
   res.redirect("/admin");
