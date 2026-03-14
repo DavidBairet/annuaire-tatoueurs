@@ -106,7 +106,7 @@ const artistSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
       index: true,
-      default: null,
+      
     },
 
     passwordHash: {

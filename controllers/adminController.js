@@ -132,7 +132,7 @@ exports.createArtist = async (req, res) => {
     const website = cleanText(req.body.website);
 
     const emailRaw = cleanText(req.body.email);
-    const email = emailRaw ? emailRaw.toLowerCase() : null;
+    const email = emailRaw ? emailRaw.toLowerCase() : undefined;
 
     const bio = cleanText(req.body.bio);
 
