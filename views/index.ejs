@@ -5,136 +5,116 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Annuaire de tatoueurs</title>
 
-<link rel="stylesheet" href="/styles.css?v=2" />
-<link rel="icon" href="/images/logo.png?v=2">
-<img src="/images/logo.png?v=2" alt="" class="logo__img">
-  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=2" />
+  <link rel="icon" href="/images/logo.png?v=2" />
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 
 <body class="page--home">
 
-<header class="topbar">
-  <div class="container topbar__inner">
+  <header class="topbar">
+    <div class="container topbar__inner">
 
-    <a class="logo" href="/">
-      <img src="/images/logo.png" alt="" class="logo__img">
-      <span class="logo__text">Annuaire</span>
-    </a>
+      <a class="logo" href="/">
+        <img src="/images/logo.png" alt="Logo Annuaire de tatoueurs" class="logo__img" />
+        <span class="logo__text">Annuaire</span>
+      </a>
 
-    <nav class="menu">
-  <a href="/conseils">Conseils</a>
-  <a href="/lexique">Lexique</a>
-  <a href="/artists/login" class="menu__login">Connexion artiste</a>
-  <a href="/artists/apply">Inscription artiste</a>
-</nav>
-
-  </div>
-</header>
-
-
-<main>
-
-  
-  <section class="hero">
-    <div class="container hero__inner">
-
-      <h1>Trouve ton tatoueur ou ton pierceur</h1>
-
-      <p>
-        Explore les artistes par ville et style, consulte leurs profils et contacte-les facilement.
-      </p>
-
-      <form class="search" action="/artists" method="GET">
-
-        <input
-          class="search__input"
-          type="search"
-          name="q"
-          placeholder="Chercher un tatoueur (nom, ville, style...)"
-          autocomplete="off"
-        />
-
-        <button class="search__btn" type="submit">
-          Rechercher
-        </button>
-
-      </form>
-
-      <div class="hero__actions">
-        <a class="btn btn--primary" href="/artists">
-          Voir les tatoueurs
-        </a>
-
-       
-      </div>
+      <nav class="menu">
+        <a href="/conseils">Conseils</a>
+        <a href="/lexique">Lexique</a>
+        <a href="/artists/login" class="menu__login">Connexion artiste</a>
+        <a href="/artists/apply">Inscription artiste</a>
+      </nav>
 
     </div>
-  </section>
+  </header>
 
+  <main>
+    <section class="hero">
+      <div class="container hero__inner">
 
- 
-  <section class="ctaPremium">
-    <div class="container">
+        <h1>Trouve ton tatoueur ou ton pierceur</h1>
 
-      <div class="ctaPremium__card">
-
-        <h2 class="ctaPremium__title">
-          Tu es tatoueur ou perceur ?
-        </h2>
-
-        <p class="ctaPremium__subtitle">
-          Rejoignez l’annuaire et développez votre visibilité, présentez votre art et attirez de nouveaux clients près de chez vous.
+        <p>
+          Explore les artistes par ville et style, consulte leurs profils et contacte-les facilement.
         </p>
 
-        <div class="ctaPremium__benefits">
+        <form class="search" action="/artists" method="GET">
+          <input
+            class="search__input"
+            type="search"
+            name="q"
+            placeholder="Chercher un tatoueur (nom, ville, style...)"
+            autocomplete="off"
+          />
 
-          <div class="benefit">✓ Profil professionnel dédié</div>
-          <div class="benefit">✓ Présentez vos styles et vos réseaux</div>
-          <div class="benefit">✓ Contact direct avec vos futurs clients</div>
-          <div class="benefit">✓ Inscription gratuite</div>
+          <button class="search__btn" type="submit">
+            Rechercher
+          </button>
+        </form>
 
-        </div>
-
-        <div class="ctaPremium__actions">
-
-          <a href="/artists/apply" class="btn btn--primary">
-            S’inscrire gratuitement
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="/artists">
+            Voir les tatoueurs
           </a>
-
-         
-
         </div>
 
       </div>
+    </section>
 
+    <section class="ctaPremium">
+      <div class="container">
+        <div class="ctaPremium__card">
+
+          <h2 class="ctaPremium__title">
+            Tu es tatoueur ou perceur ?
+          </h2>
+
+          <p class="ctaPremium__subtitle">
+            Rejoignez l’annuaire et développez votre visibilité, présentez votre art et attirez de nouveaux clients près de chez vous.
+          </p>
+
+          <div class="ctaPremium__benefits">
+            <div class="benefit">✓ Profil professionnel dédié</div>
+            <div class="benefit">✓ Présentez vos styles et vos réseaux</div>
+            <div class="benefit">✓ Contact direct avec vos futurs clients</div>
+            <div class="benefit">✓ Inscription gratuite</div>
+          </div>
+
+          <div class="ctaPremium__actions">
+            <a href="/artists/apply" class="btn btn--primary">
+              S’inscrire gratuitement
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small>
+        © <%= new Date().getFullYear() %> — Annuaire de tatoueurs par les Sites de David
+      </small>
     </div>
-  </section>
+  </footer>
 
-</main>
-
-
-<footer class="footer">
-  <div class="container">
-    <small>
-      © <%= new Date().getFullYear() %> — Annuaire de tatoueurs par les Sites de David
-    </small>
+  <div id="cookie-banner" style="position:fixed;bottom:0;left:0;width:100%;background:#111;color:#fff;padding:15px;text-align:center;z-index:9999;">
+    Ce site utilise des cookies pour améliorer votre expérience.
+    <button onclick="acceptCookies()">Accepter</button>
   </div>
-</footer>
 
-<div id="cookie-banner" style="position:fixed;bottom:0;left:0;width:100%;background:#111;color:#fff;padding:15px;text-align:center;z-index:9999;">
-  Ce site utilise des cookies pour améliorer votre expérience.
-  <button onclick="acceptCookies()">Accepter</button>
-</div>
+  <script>
+    function acceptCookies() {
+      localStorage.setItem("cookiesAccepted", "true");
+      document.getElementById("cookie-banner").style.display = "none";
+    }
 
-<script>
-function acceptCookies() {
-  localStorage.setItem("cookiesAccepted", "true");
-  document.getElementById("cookie-banner").style.display = "none";
-}
-
-if (localStorage.getItem("cookiesAccepted")) {
-  document.getElementById("cookie-banner").style.display = "none";
-}
-</script>
+    if (localStorage.getItem("cookiesAccepted")) {
+      document.getElementById("cookie-banner").style.display = "none";
+    }
+  </script>
 </body>
 </html>
