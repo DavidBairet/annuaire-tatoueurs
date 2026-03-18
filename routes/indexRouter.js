@@ -10,4 +10,9 @@ router.get("/confidentialite", (req, res) => {
   });
 });
 
+router.get("/mentions-legales", (req, res) => {
+  res.render("mentions-legales", {
+    title: "Mentions légales",
+  });
+});
 module.exports = router;
