@@ -1,6 +1,8 @@
 <footer class="footer">
   <div class="footer-inner">
-    <small>© <%= new Date().getFullYear() %> — Annuaire de tatoueurs par les Sites de David</small>
+    <small>
+      © <%= new Date().getFullYear() %> — Annuaire de tatoueurs par les Sites de David
+    </small>
 
     <div class="footer-links">
       <a href="/confidentialite">Politique de confidentialité</a>
@@ -19,8 +21,10 @@
     const banner = document.getElementById("cookie-banner");
     const button = document.getElementById("accept-cookies");
 
+    // sécurité si le DOM change
     if (!banner || !button) return;
 
+    // afficher uniquement si pas encore accepté
     if (!localStorage.getItem("cookiesAccepted")) {
       banner.style.display = "flex";
     }
