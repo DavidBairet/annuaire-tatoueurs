@@ -528,17 +528,17 @@ body.page--home .logo * {
   transform: translateY(-2px);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
 }
-
-.social-btn img {
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  min-height: 20px;
-  max-width: 20px;
-  max-height: 20px;
-  display: block;
-  flex: 0 0 20px;
-  object-fit: contain;
+.social-icon {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+  display: inline-block !important;
+  flex: 0 0 20px !important;
+  object-fit: contain !important;
+  vertical-align: middle;
   filter: brightness(0) invert(1);
 }
 
