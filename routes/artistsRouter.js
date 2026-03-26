@@ -15,6 +15,12 @@ router.get("/login", artistsController.loginForm);
 router.post("/login", artistsController.login);
 router.post("/logout", artistsController.logout);
 
+router.get("/forgot-password", artistsController.forgotPasswordGet);
+router.post("/forgot-password", artistsController.forgotPasswordPost);
+
+router.get("/reset-password/:token", artistsController.resetPasswordGet);
+router.post("/reset-password/:token", artistsController.resetPasswordPost);
+
 router.get("/me", requireArtist, artistsController.me);
 router.get("/me/edit", requireArtist, artistsController.editForm);
 router.post("/me/edit", requireArtist, artistsController.edit);

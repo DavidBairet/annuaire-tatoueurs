@@ -1,19 +1,15 @@
 <!doctype html>
 <html lang="fr">
-<head>
-  <!doctype html>
-<html lang="fr">
 
 <%- include("partials/head", { title: "Accueil - Annuaire de tatoueurs" }) %>
-
-<body class="page--home">
-</head>
 
 <body class="page--home">
 
   <%- include("partials/header") %>
 
   <main>
+
+    <!-- HERO -->
     <section class="hero">
       <div class="container hero__inner">
         <h1>Trouve ton tatoueur ou ton pierceur</h1>
@@ -44,6 +40,34 @@
       </div>
     </section>
 
+    <!-- 🔥 BANNIÈRE INK HEART -->
+    <section class="inkheart-banner">
+
+  <img
+    src="/images/inkheart-banner.png"
+    alt="Tatouage thérapeutique sur cicatrice - Ink Heart"
+  >
+
+  <div class="inkheart-links">
+    <p>Association partenaire engagée dans le tatouage thérapeutique</p>
+
+    <div class="inkheart-socials">
+
+      <a href="https://www.facebook.com/ink.heart.tatouage.sur.cicatrice.2025" target="_blank" class="social-btn facebook">
+        <img src="/images/facebook-1-svgrepo-com.svg" alt="Facebook">
+        Facebook
+      </a>
+
+      <a href="https://www.instagram.com/inkheart_isj" target="_blank" class="social-btn instagram">
+        <img src="/images/instagram-svgrepo-com.svg" alt="Instagram">
+        Instagram
+      </a>
+
+    </div>
+  </div>
+
+</section>
+    <!-- CTA PREMIUM -->
     <section class="ctaPremium">
       <div class="container">
         <div class="ctaPremium__card">
@@ -70,6 +94,7 @@
         </div>
       </div>
     </section>
+
   </main>
 
   <%- include("partials/footer") %>

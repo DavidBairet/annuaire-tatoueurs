@@ -512,7 +512,161 @@ exports.verify = async (req, res) => {
     res.status(500).send("Erreur serveur");
   }
 };
+exports.forgotPasswordGet = (req, res) => {
+  res.render("artists/forgot-password", {
+    title: "Mot de passe oublié",
+    error: null,
+    success: null,
+  });
+};
 
+exports.forgotPasswordPost = async (req, res) => {
+  try {
+    const email = cleanText(req.body.email).toLowerCase();
+
+    if (!email) {
+      return res.status(400).render("artists/forgot-password", {
+        title: "Mot de passe oublié",
+        error: "Merci de renseigner votre adresse email.",
+        success: null,
+      });
+    }
+
+    const artist = await Artist.findOne({ email });
+
+    // Message volontairement neutre
+    if (!artist) {
+      return res.render("artists/forgot-password", {
+        title: "Mot de passe oublié",
+        error: null,
+        success: "Si cette adresse existe, un lien de réinitialisation a été envoyé.",
+      });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+
+    artist.resetPasswordToken = resetToken;
+    artist.resetPasswordExpires = new Date(Date.now() + 1000 * 60 * 60); // 1h
+
+    await artist.save();
+
+    const resetUrl =
+      (process.env.BASE_URL || "http://localhost:3000") +
+      `/artists/reset-password/${resetToken}`;
+
+    // Pour le moment on affiche le lien si tu es en mode console/dev
+    return res.render("artists/forgot-password", {
+      title: "Mot de passe oublié",
+      error: null,
+      success: "Si cette adresse existe, un lien de réinitialisation a été envoyé.",
+      resetUrl: process.env.MAIL_MODE === "console" ? resetUrl : null,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).render("artists/forgot-password", {
+      title: "Mot de passe oublié",
+      error: "Erreur serveur.",
+      success: null,
+      resetUrl: null,
+    });
+  }
+};
+
+exports.resetPasswordGet = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    const artist = await Artist.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() },
+    });
+
+    if (!artist) {
+      return res.status(400).render("artists/reset-password", {
+        title: "Réinitialiser le mot de passe",
+        token: null,
+        error: "Lien invalide ou expiré.",
+        success: null,
+      });
+    }
+
+    return res.render("artists/reset-password", {
+      title: "Réinitialiser le mot de passe",
+      token,
+      error: null,
+      success: null,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).render("artists/reset-password", {
+      title: "Réinitialiser le mot de passe",
+      token: null,
+      error: "Erreur serveur.",
+      success: null,
+    });
+  }
+};
+
+exports.resetPasswordPost = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const password = String(req.body.password || "");
+    const confirmPassword = String(req.body.confirmPassword || "");
+
+    if (password.length < 8 || password.length > 72) {
+      return res.status(400).render("artists/reset-password", {
+        title: "Réinitialiser le mot de passe",
+        token,
+        error: "Le mot de passe doit contenir entre 8 et 72 caractères.",
+        success: null,
+      });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).render("artists/reset-password", {
+        title: "Réinitialiser le mot de passe",
+        token,
+        error: "Les mots de passe ne correspondent pas.",
+        success: null,
+      });
+    }
+
+    const artist = await Artist.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() },
+    });
+
+    if (!artist) {
+      return res.status(400).render("artists/reset-password", {
+        title: "Réinitialiser le mot de passe",
+        token: null,
+        error: "Lien invalide ou expiré.",
+        success: null,
+      });
+    }
+
+    artist.passwordHash = await bcrypt.hash(password, 10);
+    artist.resetPasswordToken = null;
+    artist.resetPasswordExpires = null;
+
+    await artist.save();
+
+    return res.render("artists/reset-password", {
+      title: "Réinitialiser le mot de passe",
+      token: null,
+      error: null,
+      success: "Votre mot de passe a bien été mis à jour. Vous pouvez maintenant vous connecter.",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).render("artists/reset-password", {
+      title: "Réinitialiser le mot de passe",
+      token: null,
+      error: "Erreur serveur.",
+      success: null,
+    });
+  }
+};
 exports.show = async (req, res) => {
   try {
     const artist = await Artist.findOne({

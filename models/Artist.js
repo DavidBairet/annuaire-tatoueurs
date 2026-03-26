@@ -106,7 +106,6 @@ const artistSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
       index: true,
-      
     },
 
     passwordHash: {
@@ -127,6 +126,17 @@ const artistSchema = new mongoose.Schema(
     },
 
     verifyTokenExpires: {
+      type: Date,
+      default: null,
+    },
+
+    resetPasswordToken: {
+      type: String,
+      default: null,
+      index: true,
+    },
+
+    resetPasswordExpires: {
       type: Date,
       default: null,
     },
