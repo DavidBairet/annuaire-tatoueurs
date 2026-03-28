@@ -2,9 +2,16 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const fs = require("fs/promises");
 const path = require("path");
+const mongoose = require("mongoose");
 
 const Artist = require("../models/Artist");
-const sendVerificationEmail = require("../config/mailer");
+const mailer = require("../config/mailer");
+
+const sendVerificationEmail =
+  typeof mailer === "function" ? mailer : mailer.sendVerificationEmail;
+
+const sendMail =
+  typeof mailer === "function" ? null : mailer.sendMail;
 
 const {
   cleanText,
@@ -462,11 +469,53 @@ exports.apply = async (req, res) => {
     artist.verifyTokenExpires = new Date(Date.now() + 1000 * 60 * 60 * 24);
 
     await artist.save();
-    await sendVerificationEmail(artist.email, token);
 
     const verifyUrl =
       (process.env.BASE_URL || "http://localhost:3000") +
       `/artists/verify/${token}`;
+
+    if (typeof sendVerificationEmail === "function") {
+      await sendVerificationEmail(artist.email, token);
+    }
+
+    if (typeof sendMail === "function" && process.env.ADMIN_EMAIL) {
+      await sendMail({
+        to: process.env.ADMIN_EMAIL,
+        subject: "Nouvelle inscription artiste sur l'annuaire",
+        text: [
+          "Nouvelle inscription artiste",
+          "",
+          `Nom : ${artist.name}`,
+          `Email : ${artist.email}`,
+          `Ville : ${artist.city}`,
+          `Code postal : ${artist.postalCode}`,
+          `Département : ${artist.department}`,
+          `Téléphone : ${artist.phone || "Non renseigné"}`,
+          `Styles : ${(artist.styles || []).join(", ") || "Non renseigné"}`,
+          `Instagram : ${artist.instagram || "Non renseigné"}`,
+          `Facebook : ${artist.facebook || "Non renseigné"}`,
+          `Site web : ${artist.website || "Non renseigné"}`,
+          `Bio : ${artist.bio || "Non renseigné"}`,
+          "",
+          `Lien de vérification : ${verifyUrl}`,
+        ].join("\n"),
+        html: `
+          <h2>Nouvelle inscription artiste</h2>
+          <p><strong>Nom :</strong> ${artist.name}</p>
+          <p><strong>Email :</strong> ${artist.email}</p>
+          <p><strong>Ville :</strong> ${artist.city}</p>
+          <p><strong>Code postal :</strong> ${artist.postalCode}</p>
+          <p><strong>Département :</strong> ${artist.department}</p>
+          <p><strong>Téléphone :</strong> ${artist.phone || "Non renseigné"}</p>
+          <p><strong>Styles :</strong> ${(artist.styles || []).join(", ") || "Non renseigné"}</p>
+          <p><strong>Instagram :</strong> ${artist.instagram || "Non renseigné"}</p>
+          <p><strong>Facebook :</strong> ${artist.facebook || "Non renseigné"}</p>
+          <p><strong>Site web :</strong> ${artist.website || "Non renseigné"}</p>
+          <p><strong>Bio :</strong> ${artist.bio || "Non renseigné"}</p>
+          <p><strong>Lien de vérification :</strong> <a href="${verifyUrl}">${verifyUrl}</a></p>
+        `,
+      });
+    }
 
     res.render("artists/apply_success", {
       title: "Demande envoyée",
@@ -512,6 +561,7 @@ exports.verify = async (req, res) => {
     res.status(500).send("Erreur serveur");
   }
 };
+
 exports.forgotPasswordGet = (req, res) => {
   res.render("artists/forgot-password", {
     title: "Mot de passe oublié",
@@ -534,7 +584,6 @@ exports.forgotPasswordPost = async (req, res) => {
 
     const artist = await Artist.findOne({ email });
 
-    // Message volontairement neutre
     if (!artist) {
       return res.render("artists/forgot-password", {
         title: "Mot de passe oublié",
@@ -546,7 +595,7 @@ exports.forgotPasswordPost = async (req, res) => {
     const resetToken = crypto.randomBytes(32).toString("hex");
 
     artist.resetPasswordToken = resetToken;
-    artist.resetPasswordExpires = new Date(Date.now() + 1000 * 60 * 60); // 1h
+    artist.resetPasswordExpires = new Date(Date.now() + 1000 * 60 * 60);
 
     await artist.save();
 
@@ -554,7 +603,6 @@ exports.forgotPasswordPost = async (req, res) => {
       (process.env.BASE_URL || "http://localhost:3000") +
       `/artists/reset-password/${resetToken}`;
 
-    // Pour le moment on affiche le lien si tu es en mode console/dev
     return res.render("artists/forgot-password", {
       title: "Mot de passe oublié",
       error: null,
@@ -667,10 +715,17 @@ exports.resetPasswordPost = async (req, res) => {
     });
   }
 };
+
 exports.show = async (req, res) => {
   try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).send("Artiste introuvable");
+    }
+
     const artist = await Artist.findOne({
-      _id: req.params.id,
+      _id: id,
       status: "approved",
     });
 
