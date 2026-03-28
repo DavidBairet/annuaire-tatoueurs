@@ -5,13 +5,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 
 const Artist = require("../models/Artist");
-const mailer = require("../config/mailer");
-
-const sendVerificationEmail =
-  typeof mailer === "function" ? mailer : mailer.sendVerificationEmail;
-
-const sendMail =
-  typeof mailer === "function" ? null : mailer.sendMail;
+const { sendMail, sendVerificationEmail } = require("../config/mailer");
 
 const {
   cleanText,
