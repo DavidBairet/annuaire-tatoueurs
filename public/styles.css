@@ -342,42 +342,46 @@ h3,
 /* ===== PROMO SITE PRO ===== */
 
 .pro-promo-card {
-  max-width: 780px;
-  margin: 20px auto 0;
-  padding: 18px;
+  max-width: 860px;
+  margin: 26px auto 0;
+  padding: 20px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
-  border: 1px solid rgba(227, 82, 198, 0.32);
-  border-radius: 20px;
+  gap: 22px;
+  border: 1px solid rgba(227, 82, 198, 0.38);
+  border-radius: 22px;
   background:
-    linear-gradient(135deg, rgba(227, 82, 198, 0.16), rgba(120, 70, 255, 0.12)),
-    rgba(28, 28, 44, 0.55);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+    linear-gradient(135deg, rgba(227, 82, 198, 0.18), rgba(120, 70, 255, 0.14)),
+    rgba(18, 18, 30, 0.82);
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .pro-promo-card__text {
   text-align: left;
+  flex: 1;
 }
 
 .pro-promo-card__text strong {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
   color: #fff;
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1.35;
 }
 
 .pro-promo-card__text span {
   display: block;
   color: rgba(242, 240, 255, 0.78);
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.55;
 }
 
 .pro-promo-card__actions {
   display: flex;
-  gap: 9px;
+  gap: 10px;
   flex-wrap: wrap;
   justify-content: flex-end;
 }
@@ -386,14 +390,17 @@ h3,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 9px 13px;
-  border-radius: 13px;
+  min-height: 40px;
+  padding: 10px 15px;
+  border-radius: 14px;
   color: #fff;
   text-decoration: none;
   font-size: 13px;
   font-weight: 800;
   white-space: nowrap;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 
 .pro-promo-btn--site {
@@ -405,12 +412,13 @@ h3,
 }
 
 .pro-promo-btn--fb {
-  background: #1877f2;
+  background: linear-gradient(135deg, #1877f2, #3b82f6);
 }
 
 .pro-promo-btn:hover {
   transform: translateY(-2px);
-  opacity: 0.95;
+  opacity: 0.96;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.32);
 }
 
 /* ===== CTA PREMIUM ===== */
