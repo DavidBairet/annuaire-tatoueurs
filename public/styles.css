@@ -471,7 +471,7 @@ body.page--home .logo * {
   transform: translateY(-3px);
 }
 
-/* ===== BANNIÈRE INK HEART ===== */
+//* ===== BANNIÈRE INK HEART ===== */
 
 .inkheart-banner {
   width: min(1100px, 92vw);
@@ -513,13 +513,13 @@ body.page--home .logo * {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 11px 16px;
+  gap: 9px;
+  padding: 11px 18px;
   border-radius: 14px;
   text-decoration: none;
   font-weight: 800;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
@@ -528,32 +528,21 @@ body.page--home .logo * {
   transform: translateY(-2px);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
 }
+
 .social-icon {
-  width: 20px !important;
-  height: 20px !important;
-  min-width: 20px !important;
-  min-height: 20px !important;
-  max-width: 20px !important;
-  max-height: 20px !important;
-  display: inline-block !important;
-  flex: 0 0 20px !important;
-  object-fit: contain !important;
-  vertical-align: middle;
-  filter: brightness(0) invert(1);
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  flex: 0 0 20px;
+  color: #fff;
 }
 
 .social-btn.facebook {
-  background: #1877f2;
+  background: linear-gradient(135deg, #1877f2, #3b82f6);
 }
 
 .social-btn.instagram {
-  background: linear-gradient(
-    45deg,
-    #f58529,
-    #dd2a7b,
-    #8134af,
-    #515bd4
-  );
+  background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4);
 }
 
 /* ===== RESPONSIVE ===== */
