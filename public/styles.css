@@ -769,3 +769,51 @@ body.page--home .logo * {
 .footer-links a:hover {
   color: #fff;
 }
+.pro-links {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.pro-links__text {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: rgba(242, 240, 255, 0.75);
+}
+
+.pro-links__buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pro-btn {
+  padding: 9px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  color: white;
+  transition: 0.2s ease;
+}
+
+/* Couleurs */
+
+.pro-btn.site {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.pro-btn.insta {
+  background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af);
+}
+
+.pro-btn.fb {
+  background: #1877f2;
+}
+
+/* Hover */
+
+.pro-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
